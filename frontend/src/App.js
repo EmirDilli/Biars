@@ -2,19 +2,32 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import HomePage from "./pages/homePageStudent/HomePage";
 import React, { useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 
 function App() {
   const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Check if the user is already authenticated (e.g., by checking the presence of a token in localStorage)
     const token = localStorage.getItem("token");
     if (token) {
-      // If token exists, consider the user as authenticated
-      setAuthenticated(true);
+      // If token exists, decode it
+      const decodedToken = jwtDecode(token);
+      // Check if the token is expired
+      const currentTime = Date.now() / 1000; // Convert milliseconds to seconds
+      if (decodedToken.exp < currentTime) {
+        // Token is expired, set authenticated to false
+        setAuthenticated(false);
+        // Optionally, you can remove the expired token from localStorage
+        localStorage.removeItem("token");
+      } else {
+        // Token is still valid, set authenticated to true
+        setAuthenticated(true);
+      }
+    } else {
+      // No token found, set authenticated to false
+      setAuthenticated(false);
     }
-    // Once the check is complete, set loading to false
     setLoading(false);
   }, []);
 
@@ -24,16 +37,7 @@ function App() {
   }
   return (
     <Routes>
-      <Route
-        path="/login"
-        element={
-          authenticated ? (
-            <Navigate to="/main" />
-          ) : (
-            <LoginPage setAuthenticated={setAuthenticated} />
-          )
-        }
-      />
+      <Route path="/login" element={<LoginPage />} />
       <Route
         path="/main"
         element={authenticated ? <HomePage /> : <Navigate to="/login" />}

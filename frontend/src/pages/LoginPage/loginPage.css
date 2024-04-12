@@ -44,7 +44,8 @@ input[type="password"] {
   justify-content: center;
   margin: 0 auto 20px; /* Adjust the margin as needed */
   width: 150px; /* Adjust the width as needed */
-  transform: translateX(65px);
+
+  transform: translateX(110px);
 }
 
 button {
