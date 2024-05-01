@@ -23,7 +23,10 @@ export default function LoginPage({ setAuthenticated }) {
 
       if (response.status === 200) {
         localStorage.setItem("token", response.data.data.user.bearerToken);
+        localStorage.setItem("userId", response.data.data.user._id);
+
         setAuthenticated(true);
+
         navigate("/main");
       } else {
         setError("Invalid username or password");

@@ -13,6 +13,12 @@
   padding: 20px;
   background-color: #f5f5f5;
 }
+.sidebarHr {
+  border: none;
+  background-color: #f5f5f5; /* The same as your sidebar background */
+  height: 1px; /* or any height you prefer */
+  margin: 0; /* to ensure it stretches to the full width */
+}
 
 .sidebarList {
   padding: 0;

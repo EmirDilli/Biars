@@ -7,11 +7,19 @@
 }
 
 .login-form {
-  background-color: #fff;
-  padding: 40px; /* Increased padding */
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 320px; /* Set a specific width */
+  background: white;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* This adds a subtle shadow to the form */
+  width: 300px; /* Adjust width as necessary */
+  position: relative; /* Positioning context for absolute positioned elements inside */
+}
+
+.login-form .logo {
+  display: block; /* Makes it easier to center the image */
+  margin: 0 auto 20px; /* Horizontally centers the image and adds space below */
+  width: 150px; /* Adjust the width as needed */
+  height: auto; /* Keeps the aspect ratio of the image */
 }
 
 .login-form h2 {
@@ -37,15 +45,6 @@ input[type="password"] {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 3px;
-}
-.logo {
-  display: block;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 20px; /* Adjust the margin as needed */
-  width: 150px; /* Adjust the width as needed */
-
-  transform: translateX(110px);
 }
 
 button {

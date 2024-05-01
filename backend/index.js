@@ -3,6 +3,8 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const authRouter = require("./src/routes/auth");
+const userRouter = require("./src/routes/user");
+const workspaceRouter = require("./src/routes/workpsace");
 
 dotenv.config();
 const app = express();
@@ -21,6 +23,8 @@ app.get("/", (req, res) => {
   });
 });
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/workspace", workspaceRouter);
 
 async function run() {
   mongoose

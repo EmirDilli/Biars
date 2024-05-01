@@ -10,6 +10,7 @@ const userSchema = new Schema({
   isAdmin: { type: Number, required: true },
   profileUrl: String,
   bearerToken: String,
+  workspaces: [Schema.Types.ObjectId],
 });
 
 const User = mongoose.model("User", userSchema);

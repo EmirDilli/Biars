@@ -1,15 +1,15 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
-const { generateResponse } = require("../../utils/response");
-const User = require("../models/user");
+const { generateResponse } = require("../utils/response");
+const User = require("../schemas/user");
 
 /**
  * @param {express.Request} req
  * @param {express.Response} res
  * @param {express.NextFunction}
  */
-module.exports =
+module.exports.isAuth =
   /**
    * @param {express.Request} req
    * @param {express.Response} res
@@ -21,14 +21,14 @@ module.exports =
       //find JWT in Headers
       const token = req.headers["authorization"];
       if (!token) {
-        return res.json(generateResponse(401, "Unauthorized", {}));
+        return res.status(401).json(generateResponse("Unauthorized", {}));
       } else {
         const bearerToken = token.split(" ")[1];
-        const tokenDecode = jwt.verify(bearerToken, process.env.SECRET_KEY);
+        const tokenDecode = jwt.verify(bearerToken, process.env.JWT_SECRET_KEY);
         const user = await User.findById(tokenDecode.user_id);
 
         if (!user) {
-          return res.json(generateResponse(404, "User not Found", {}));
+          return res.status(404).json(generateResponse("User not Found", {}));
         }
         req.user = user;
 

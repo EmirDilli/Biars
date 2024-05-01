@@ -4,15 +4,13 @@
   background-color: #ddd0c8;
   display: flex;
   align-items: center;
-  position: sticky;
+  position: fixed;
+  z-index: 1000;
   top: 0;
 }
 
 .topbarLeft {
-  display: flex;
   flex: 1;
-
-  align-items: center;
 }
 
 .topbarCenter {
@@ -26,7 +24,7 @@
 
 .searchInput {
   border: none;
-  width: 90%;
+  width: 65%;
 }
 
 .searchInput:focus {
@@ -44,7 +42,7 @@
 .logo {
   font-size: 24px;
   margin-top: 20px;
-  margin-left: -25px;
+  margin-left: 15px;
   font-weight: bold;
   color: #323232;
   cursor: pointer;

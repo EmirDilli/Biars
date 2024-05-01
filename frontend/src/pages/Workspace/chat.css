@@ -1,0 +1,303 @@
+/* chat.css */
+.chat-contents {
+  display: flex; /* Enables flexbox */
+  flex-direction: row; /* Aligns children horizontally */
+  height: 100vh; /* Optional: Takes full viewport height */
+  width: 100vw; /* Optional: Takes full viewport width */
+}
+.chat {
+  display: flex;
+  flex-direction: row; /* Aligns children horizontally */
+  height: 100vh;
+  width: 100%;
+  overflow: hidden; /* Prevents scrollbars on the chat container */
+}
+.horizontal-layout {
+  flex-direction: column-reverse; /* Reverse the stacking order */
+  align-items: flex-start; /* Align items to the start of the flex container */
+  gap: 10px; /* Spacing between the sections */
+}
+.selected-workspace {
+  margin-bottom: 20px;
+}
+
+.sidebar-container {
+  background-color: #f5f3f0;
+  margin-top: 75px;
+  bottom: 0;
+  flex: 1;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 5px 20px 5px; /* Adjusted padding */
+  box-sizing: border-box;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1); /* Adding horizontal shadow */
+}
+
+.chat-container {
+  display: flex;
+  flex: 4;
+  flex-direction: column;
+  height: 100vh; /* full height of the viewport */
+}
+
+.chat-header {
+  margin-top: 75px;
+  align-items: center; /* Center items vertically */
+  padding: 10px; /* Adds padding inside the header */
+  background-color: #f0f0f0; /* Light background for the header */
+  border-bottom: 1px solid #ccc;
+  width: 100%; /* Separator line */
+}
+
+.chat-receiver-image {
+  height: 40px; /* Set the image height */
+  width: 40px; /* Set the image width */
+  border-radius: 50%; /* Make the image circular */
+  margin-right: 10px; /* Space between the image and the name */
+}
+
+.receiver-name {
+  font-size: 16px; /* Text size */
+  font-weight: bold; /* Bold text */
+}
+.messageList {
+  flex-grow: 1; /* takes up all available space */
+  overflow-y: auto; /* enables scrolling */
+  padding: 10px; /* add padding for visual spacing */
+}
+.message {
+  margin-bottom: 10px;
+  padding: 5px;
+  border-radius: 10px;
+  max-width: 80%;
+  width: fit-content;
+  background-color: #dcf8c6; /* Example for sent message */
+  align-self: flex-end; /* Example for sent message */
+
+  /* New properties for text wrapping */
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.sent {
+  align-self: flex-end;
+  background-color: #dcf8c6; /* Light green background like WhatsApp */
+  margin-left: auto; /* Pushes sent messages to start from the middle of the chat */
+}
+
+.received {
+  align-self: flex-start;
+  background-color: #fff;
+  margin-right: 20%; /* Keeps received messages on the left, but not beyond the middle */
+}
+.message-content {
+  margin-bottom: 2px;
+}
+
+.message-info {
+  font-size: 12px;
+  text-align: right;
+  color: gray;
+}
+
+.message-date {
+  padding-right: 10px;
+}
+.input-chat {
+  padding: 10px; /* padding for visual spacing */
+}
+.input-chat input {
+  justify-content: center;
+  width: 98%; /* Input field takes up all horizontal space */
+  padding: 8px; /* Padding inside the input field */
+  border: 1px solid #ccc; /* Slightly defined borders */
+  border-radius: 4px; /* Rounded corners */
+}
+
+.workspace-list-container {
+  flex-grow: 1; /* Ensures it takes all available space */
+}
+
+.fixed-button-container {
+  padding: 20px 15px 20px 15px; /* Ensures padding around the button */
+  background-color: #f5f3f0; /* Same as sidebar for consistency */
+}
+
+.open-modal-button {
+  width: 100%; /* Makes the button stretch to the full width of the container */
+  padding: 12px 20px;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.workspace-list {
+  padding: 20px;
+}
+.workspace-header {
+  text-align: center;
+}
+
+.workspace-item {
+  background-color: #9a9180;
+  width: calc(100% - 40px);
+  color: #fff;
+  padding: 12px 20px;
+  margin: 5px 0; /* Reduced margin to decrease space between items */
+  border-radius: 8px; /* Adjust radius to match the new size */
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.2s, transform 0.2s ease-out, box-shadow 0.2s;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  font-size: 14px; /* Adjust font size if necessary */
+}
+
+.workspace-item:hover {
+  background-color: #a29c91;
+  transform: scale(1.03); /* Slightly reduced scale effect */
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+}
+
+/* Scrollbar customization */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #eae9e6;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #9a9180;
+  border-radius: 10px;
+}
+
+.channels-section {
+  background-color: #ddd0c8; /* Example color */
+  margin-bottom: 20px; /* Spacing between sections */
+  padding: 10px; /* Spacing inside the section */
+  border-radius: 10px; /* Rounded corners */
+}
+
+.channel-item {
+  /* Style for individual channel items */
+  padding: 8px 0; /* Spacing for each channel item */
+  border-bottom: 1px solid #ccc; /* Separator between items */
+}
+.main-content {
+  margin-top: 75px;
+  padding: 20px;
+  flex: 1;
+  background-color: #f5f3f0;
+  height: calc(100vh - 125px);
+  overflow-y: auto; /* Enables vertical scrolling */
+  overflow-x: hidden; /* Prevents horizontal scrolling */
+}
+
+/* Styling workspace details: Channels and Direct Messages */
+.workspace-content h2 {
+  color: #5d534a; /* Dark brown for the workspace title */
+  margin-bottom: 16px; /* Space below the workspace title */
+}
+
+.channels-section,
+.direct-messages-section {
+  background-color: #fff; /* White background for sections */
+  padding: 10px;
+  border-radius: 8px; /* Rounded corners for the sections */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  margin-bottom: 20px; /* Space between sections */
+}
+
+.channel-item,
+.dm-item {
+  padding: 8px;
+  margin: 8px 0;
+  background-color: #e8e8e8; /* Slightly darker beige for items */
+  color: #5d534a; /* Text color to match the title */
+  border-radius: 4px; /* Slightly rounded corners for each item */
+  cursor: pointer;
+  transition: background-color 0.2s; /* Smooth transition for hover effect */
+}
+
+.channel-item:hover,
+.dm-item:hover {
+  background-color: #d8d8d8; /* Lighten the item on hover for interactivity */
+}
+
+.add-users-section {
+  text-align: center; /* Center the add users section */
+}
+
+.add-users-section button {
+  background-color: #5d534a; /* Button color to match the theme */
+  color: #ffffff; /* White text for contrast */
+  padding: 10px 20px;
+  border-radius: 20px; /* Pill-shaped button */
+  border: none; /* No border for a clean look */
+  cursor: pointer;
+  transition: background-color 0.2s; /* Smooth transition for hover effect */
+}
+
+.add-users-section button:hover {
+  background-color: #786a5f; /* Lighten button on hover */
+}
+
+.workspace-section {
+  flex: 1; /* Each section takes equal width */
+  display: flex;
+  flex-direction: column; /* Makes sure the content inside each section is laid out vertically */
+  min-width: 0;
+}
+.direct-messages-and-add-user {
+  display: flex;
+  flex-direction: column; /* Stacks direct messages and add user sections vertically */
+}
+
+.workspace-section .add-channel-button {
+  display: block; /* Make the button a block to fill the container */
+  margin-top: 10px; /* Space it a bit from the list */
+  /* Rest of the button styles */
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #ddd0c8;
+  border-radius: 8px;
+}
+.section-header-with-search {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* This spreads out the header and search field */
+  margin-bottom: 10px; /* Adjust as needed */
+}
+
+.search-input {
+  height: 10px; /* Match the height with the design */
+  padding: 0 10px; /* Adjust as needed */
+  margin-left: 10px; /* Adjust as needed */
+  border: 1px solid #ccc; /* Adjust color as needed */
+  border-radius: 4px; /* Optional, for rounded corners */
+}
+
+.create-channel-button {
+  background-color: #5d534a; /* Button color to match the theme */
+  color: #ffffff; /* White text for contrast */
+  padding: 10px 20px;
+  border-radius: 20px; /* Pill-shaped button */
+  border: none; /* No border for a clean look */
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-bottom: 15px;
+}
+
+.create-channel-button:hover {
+  background-color: #786a5f;
+}

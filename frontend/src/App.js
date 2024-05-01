@@ -1,8 +1,9 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage/LoginPage";
-import HomePage from "./pages/homePageStudent/HomePage";
+import HomePage from "./pages/homePage/HomePage";
 import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+import Workspace from "./pages/Workspace/Chat";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -37,12 +38,18 @@ function App() {
   }
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
+      <Route
+        path="/login"
+        element={<LoginPage setAuthenticated={setAuthenticated} />}
+      />
       <Route
         path="/main"
         element={authenticated ? <HomePage /> : <Navigate to="/login" />}
       />
-      <Route path="/" element={<Navigate to="/login" />} />
+      <Route
+        path="/workspace"
+        element={authenticated ? <Workspace /> : <Navigate to="/login" />}
+      />
     </Routes>
   );
 }
