@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Topbar from "../../components/Topbar/Topbar";
+import CreateJoinWorkspaceModal from "./CreateJoinWorkspaceModal";
+import CreateWorkspaceModal from "./CreateWorkspaceModal";
+import { Info } from "@mui/icons-material";
 import io from "socket.io-client";
 
 import "./chat.css";
@@ -8,9 +11,11 @@ import { useNavigate } from "react-router-dom";
 let socket;
 function Workspace() {
   const navigate = useNavigate();
+
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
   const [selectedWorkspace, setSelectedWorkspace] = useState(null);
+  const [senderUser, setSenderUser] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [workspaces, setWorkspaces] = useState([]);
   const [channels, setChannels] = useState([]);
@@ -24,6 +29,9 @@ function Workspace() {
   const [receiverUser, setReceiverUser] = useState(null);
   const [inputMessage, setInputMessage] = useState(""); // State for storing input field text
   const [messages, setMessages] = useState([]);
+  const [isCreateWorkspaceModalOpen, setIsCreateWorkspaceModalOpen] =
+    useState(false);
+  const [isCreateModalOpen, setCreateModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,8 +45,18 @@ function Workspace() {
             },
           }
         );
+        const userData = await axios.get(
+          `http://localhost:3000/api/v1/user/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         setWorkspaces(response.data.data);
+        setSenderUser(userData.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -60,6 +78,17 @@ function Workspace() {
     };
   }, []);
 
+  useEffect(() => {
+    // Scroll to the bottom of the message list when messages change
+    scrollToBottom();
+  }, [messages]);
+  const scrollToBottom = () => {
+    const messageList = document.querySelector(".message-list");
+    if (messageList) {
+      messageList.scrollTop = messageList.scrollHeight;
+    }
+  };
+
   const handleWorkspaceSelection = (workspace) => {
     setSelectedWorkspace(workspace);
     setSidebarOpen(false);
@@ -73,9 +102,11 @@ function Workspace() {
           },
         }
       );
+
       setChannels(response.data.data.channels);
       setDirectMessages(response.data.data.dms);
-      setFilteredChannels(response.data.data.channels); // Also set filtered channels
+      setFilteredChannels(response.data.data.channels);
+      // Also set filtered channels
       setFilteredDMs(response.data.data.dms);
     }
     getWorkspaceInfo();
@@ -101,7 +132,7 @@ function Workspace() {
     );
   };
 
-  const handleDmClick = (dmId, userId) => {
+  const handleDmClick = (dmId) => {
     async function getDm() {
       const dm = await axios.get(
         `http://localhost:3000/api/v1/workspace/dm/${dmId}`,
@@ -112,8 +143,11 @@ function Workspace() {
           },
         }
       );
+      setSelectedChannel(null);
       setSelectedDm(dm.data.data);
       setReceiverUser(dm.data.data.user);
+      setMessages(dm.data.data.messages);
+
       socket.emit("joinRoom", { roomId: dmId });
     }
     getDm();
@@ -121,26 +155,110 @@ function Workspace() {
   function handleChangeChatInput(event) {
     setInputMessage(event.target.value);
   }
-  function handleKeyPress(event) {
-    if (event.key === "Enter" && inputMessage.trim()) {
-      const newMessage = {
-        id: messages.length + 1, // Simple id assignment, might need unique id generation in production
-        text: inputMessage,
-        timestamp: new Date(),
-        senderId: userId,
-      };
-      socket.emit("sendMessage", {
-        roomName: `dm_${selectedDm._id}`,
-        inputMessage,
-      });
+  function handleSendDm(event) {
+    async function saveMessage() {
+      if (event.key === "Enter" && inputMessage.trim()) {
+        const newMessage = {
+          text: inputMessage,
+          date: new Date(),
+          sender_id: userId,
+          receiver_id: receiverUser._id,
+        };
+        socket.emit("sendMessage", {
+          roomName: ` ${selectedDm._id}`,
+          message: newMessage,
+        });
 
-      setMessages([...messages, inputMessage]);
-      setInputMessage("");
-      event.preventDefault();
+        const result = await axios.post(
+          "http://localhost:3000/api/v1/workspace/dm/saveMessage",
+          { dm_id: selectedDm._id, message: newMessage },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setMessages([...messages, result.data.data]);
+        setInputMessage("");
+        event.preventDefault();
+      }
     }
+    saveMessage();
   }
 
-  const handleOpenModal = () => {};
+  const handleSendChannel = (event) => {
+    async function saveMessage() {
+      if (event.key === "Enter" && inputMessage.trim() !== "") {
+        const newMessage = {
+          text: inputMessage,
+          date: new Date(),
+          sender_id: {
+            _id: senderUser._id,
+            name: senderUser.name,
+          },
+          receiver_id: null,
+        };
+        socket.emit("sendMessage", {
+          roomName: ` ${selectedChannel._id}`,
+          message: newMessage,
+        });
+
+        const result = await axios.post(
+          "http://localhost:3000/api/v1/workspace/channel/saveMessage",
+          { channel_id: selectedChannel._id, message: newMessage },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        newMessage._id = result.data.data._id;
+        setMessages([...messages, newMessage]);
+        setInputMessage(""); // Clear input after sending
+        event.preventDefault();
+      }
+    }
+    saveMessage();
+  };
+  const handleChannelClick = (channel_id) => {
+    async function fetchChannel() {
+      const response = await axios.get(
+        `http://localhost:3000/api/v1/workspace/channel/${channel_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setSelectedChannel(response.data.data);
+      setSelectedDm(null);
+      setMessages(response.data.data.messages);
+    }
+    fetchChannel();
+  };
+
+  const handleOpenModal = () => {
+    setIsCreateWorkspaceModalOpen(true);
+  };
+
+  const handleJoinWorkspace = () => {
+    console.log("Join Workspace logic here");
+    // Add your join logic here or navigate to the join page
+  };
+
+  const handleCreateWorkspace = () => {
+    handleOpenCreateModal();
+    // Add your create logic here or navigate to the create page
+  };
+
+  const handleOpenCreateModal = () => {
+    setIsCreateWorkspaceModalOpen(false); // Close the main modal
+    setCreateModalOpen(true); // Open the create modal
+  };
+  const handleCloseCreateModal = () => setCreateModalOpen(false);
   const handleCreateChannel = () => {};
   const handleInviteUsers = () => {};
 
@@ -164,14 +282,26 @@ function Workspace() {
         <div className="fixed-button-container">
           <button
             className="open-modal-button"
-            onClick={() => handleOpenModal("initial")}
+            onClick={() => handleOpenModal(true)}
           >
             Join/Create Workspace
           </button>
+          <CreateJoinWorkspaceModal
+            isOpen={isCreateWorkspaceModalOpen}
+            setIsOpen={setIsCreateWorkspaceModalOpen}
+            onCreate={handleCreateWorkspace}
+            onJoin={handleJoinWorkspace}
+          />
+          <CreateWorkspaceModal
+            isOpen={isCreateWorkspaceModalOpen}
+            setIsOpen={setIsCreateWorkspaceModalOpen}
+            isCreateModalOpen={isCreateModalOpen}
+            setCreateModalOpen={setCreateModalOpen}
+          />
         </div>
       </div>
       <div className="chat-container">
-        {selectedChannel || selectedDm ? (
+        {selectedDm && (
           <>
             <div className="chat-header">
               <img
@@ -180,40 +310,94 @@ function Workspace() {
                 alt="Chat Receiver"
               />
               <div className="receiver-name">
-                {selectedDm ? selectedDm.user.name : "Channel Name"}
+                {selectedDm ? selectedDm.user.name : "Dm Name"}
               </div>
             </div>
-            <div className="messageList">
-              {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`message ${
-                    message.senderId === receiverUser ? "received" : "sent"
-                  }`}
-                >
-                  <div className="message-content">{message.text}</div>
-                  <div className="message-info">
-                    <span className="message-date">
-                      {new Date(message.timestamp).toLocaleTimeString()}
-                    </span>
+            <div className="message-list">
+              {messages.map((message) => {
+                return (
+                  <div
+                    key={message._id}
+                    className={`message ${
+                      message.sender_id === receiverUser._id
+                        ? "received"
+                        : "sent"
+                    }`}
+                  >
+                    <div className="message-content">{message.text}</div>
+                    <div className="message-info">
+                      <span className="message-date">
+                        {new Date(message.date).toLocaleTimeString()}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             <div className="input-chat">
               <input
                 type="text"
                 value={inputMessage}
                 onChange={handleChangeChatInput}
-                onKeyPress={handleKeyPress}
+                onKeyPress={handleSendDm}
                 placeholder="Type a message..."
               />
             </div>
           </>
-        ) : (
-          <div style={{ marginTop: "100px", textAlign: "center" }}>
-            Select DM or Channel...
-          </div>
+        )}
+        {selectedChannel && (
+          <>
+            <div className="chat-header-channel">
+              <h1>{selectedChannel.name}</h1>
+              <button className="info-button-channel">
+                <Info />
+              </button>
+            </div>
+            <div className="message-list">
+              {messages.map((message) => (
+                <div key={message._id} className="message-container">
+                  <div
+                    className={`user-info-channel ${
+                      message.sender_id._id === senderUser._id
+                        ? "sent-info"
+                        : "received-info"
+                    }`}
+                  >
+                    <img
+                      className="user-image-channel"
+                      src={"assets/logo.png"} // Fallback to default image if none provided
+                      alt={message.sender_id.name}
+                    />
+                    <span className="user-name-channel">
+                      {message.sender_id.name}
+                    </span>
+                  </div>
+                  <div
+                    className={`message-channel ${
+                      message.sender_id._id === senderUser._id
+                        ? "sent"
+                        : "received"
+                    }`}
+                  >
+                    {message.text}
+                    <span className="message-date-channel">
+                      {new Date(message.date).toLocaleTimeString()}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="input-container-channel">
+              <input
+                type="text"
+                value={inputMessage}
+                onChange={handleChangeChatInput}
+                onKeyPress={handleSendChannel}
+                placeholder="Type a message..."
+              />
+            </div>
+          </>
         )}
       </div>
       <div className={`main-content`}>
@@ -234,7 +418,10 @@ function Workspace() {
                     className="search-input"
                   />
                 </div>
-                <ChannelsList channels={filteredChannels} />
+                <ChannelsList
+                  channels={filteredChannels}
+                  onChannelClick={handleChannelClick}
+                />
                 <button
                   className="section-footer-button"
                   onClick={handleCreateChannel}
@@ -274,11 +461,15 @@ function Workspace() {
   );
 }
 
-function ChannelsList({ channels }) {
+function ChannelsList({ channels, onChannelClick }) {
   return (
     <div className="channels-section">
-      {channels.map((channel) => (
-        <div key={channel._id} className="channel-item">
+      {channels.map((channel, index) => (
+        <div
+          key={index}
+          className="channel-item"
+          onClick={() => onChannelClick(channel._id)}
+        >
           {channel.name}
         </div>
       ))}

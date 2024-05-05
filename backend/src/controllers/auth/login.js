@@ -33,7 +33,7 @@ module.exports.login = async (req, res) => {
       },
       process.env.JWT_SECRET_KEY,
       {
-        expiresIn: "2h",
+        expiresIn: "1y",
       }
     );
     await User.findByIdAndUpdate(user._id, { bearerToken: token });

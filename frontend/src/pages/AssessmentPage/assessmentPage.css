@@ -1,0 +1,74 @@
+.assessment-page-container {
+  margin-top: 75px;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.upload-assessment-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.drag-drop-box {
+  width: 300px;
+  height: 100px;
+  border: 2px solid #4caf50;
+  border-radius: 10px; /* Rounded corners */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+  cursor: pointer;
+  text-align: center;
+  color: #4caf50;
+  background-color: #f9f9f9; /* Light background to distinguish the area */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.drag-drop-box img {
+  max-height: 50px; /* Adjusted maximum height */
+  max-width: 80%; /* Ensuring the image does not overflow the width */
+  margin-right: 10px; /* Space between the image and the filename */
+}
+
+.drag-drop-box span {
+  pointer-events: none; /* Prevents the file name from interfering with file input */
+  white-space: nowrap; /* Keeps the text from wrapping */
+  overflow: hidden; /* Prevent text overflow */
+  text-overflow: ellipsis; /* Adds an ellipsis if the text is too long */
+}
+
+.file-select-button {
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.file-select-button:hover {
+  background-color: #45a049;
+}
+
+.upload-form button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: white;
+  background-color: #4caf50;
+  border: none;
+  cursor: pointer;
+}
+
+.upload-form button:hover {
+  background-color: #45a049;
+}
+
+.upload-form button:disabled {
+  background-color: #ccc;
+}

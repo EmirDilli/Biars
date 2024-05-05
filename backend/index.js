@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const authRouter = require("./src/routes/auth");
 const userRouter = require("./src/routes/user");
 const workspaceRouter = require("./src/routes/workpsace");
+const assessmentRouter = require("./src/routes/assessment");
 
 dotenv.config();
 const app = express();
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/workspace", workspaceRouter);
+app.use("/api/v1/assessment", assessmentRouter);
 
 async function run() {
   mongoose

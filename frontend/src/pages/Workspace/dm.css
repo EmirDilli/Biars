@@ -1,0 +1,84 @@
+.chat-container {
+  display: flex;
+  flex: 4;
+  flex-direction: column;
+  height: 100vh; /* full height of the viewport */
+}
+
+.chat-header {
+  margin-top: 75px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Center items vertically */
+  padding: 10px; /* Adds padding inside the header */
+  background-color: #f0f0f0; /* Light background for the header */
+  border-bottom: 1px solid #ccc; /* Separator line */
+}
+
+.chat-receiver-image {
+  height: 40px; /* Set the image height */
+  width: 40px; /* Set the image width */
+  border-radius: 50%; /* Make the image circular */
+  margin-right: 10px; /* Space between the image and the name */
+}
+
+.receiver-name {
+  font-size: 16px; /* Text size */
+  font-weight: bold; /* Bold text */
+}
+.message-list {
+  flex-grow: 1; /* takes up all available space */
+  overflow-y: auto; /* enables scrolling */
+  padding: 10px; /* add padding for visual spacing */
+}
+.message {
+  margin-bottom: 10px;
+  padding: 10px; /* Adjust padding to your preference */
+  border-radius: 10px;
+  max-width: 80%;
+  width: fit-content;
+
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.sent {
+  align-self: flex-end;
+  background-color: #dcf8c6; /* Light green background like WhatsApp */
+  margin-left: auto; /* Pushes sent messages to start from the middle of the chat */
+}
+
+.received {
+  align-self: flex-start;
+  background-color: #a9ddf3;
+  margin-right: 20%; /* Keeps received messages on the left, but not beyond the middle */
+}
+.message-content {
+  margin-bottom: 2px;
+}
+
+.message-info {
+  font-size: 12px;
+  text-align: right;
+  color: gray;
+}
+
+.received .message-date {
+  margin-right: 10px;
+  /* Margin left for received messages */
+}
+
+.sent .message-date {
+  margin-right: 10px; /* Margin right for sent messages */
+}
+.input-chat {
+  padding: 10px; /* padding for visual spacing */
+}
+.input-chat input {
+  justify-content: center;
+  width: 98%; /* Input field takes up all horizontal space */
+  padding: 8px; /* Padding inside the input field */
+  border: 1px solid #ccc; /* Slightly defined borders */
+  border-radius: 4px; /* Rounded corners */
+}

@@ -1,4 +1,6 @@
 /* chat.css */
+@import url("dm.css");
+@import url("channel.css");
 .chat-contents {
   display: flex; /* Enables flexbox */
   flex-direction: row; /* Aligns children horizontally */
@@ -32,88 +34,6 @@
   padding: 20px 5px 20px 5px; /* Adjusted padding */
   box-sizing: border-box;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1); /* Adding horizontal shadow */
-}
-
-.chat-container {
-  display: flex;
-  flex: 4;
-  flex-direction: column;
-  height: 100vh; /* full height of the viewport */
-}
-
-.chat-header {
-  margin-top: 75px;
-  align-items: center; /* Center items vertically */
-  padding: 10px; /* Adds padding inside the header */
-  background-color: #f0f0f0; /* Light background for the header */
-  border-bottom: 1px solid #ccc;
-  width: 100%; /* Separator line */
-}
-
-.chat-receiver-image {
-  height: 40px; /* Set the image height */
-  width: 40px; /* Set the image width */
-  border-radius: 50%; /* Make the image circular */
-  margin-right: 10px; /* Space between the image and the name */
-}
-
-.receiver-name {
-  font-size: 16px; /* Text size */
-  font-weight: bold; /* Bold text */
-}
-.messageList {
-  flex-grow: 1; /* takes up all available space */
-  overflow-y: auto; /* enables scrolling */
-  padding: 10px; /* add padding for visual spacing */
-}
-.message {
-  margin-bottom: 10px;
-  padding: 5px;
-  border-radius: 10px;
-  max-width: 80%;
-  width: fit-content;
-  background-color: #dcf8c6; /* Example for sent message */
-  align-self: flex-end; /* Example for sent message */
-
-  /* New properties for text wrapping */
-  white-space: normal;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-
-.sent {
-  align-self: flex-end;
-  background-color: #dcf8c6; /* Light green background like WhatsApp */
-  margin-left: auto; /* Pushes sent messages to start from the middle of the chat */
-}
-
-.received {
-  align-self: flex-start;
-  background-color: #fff;
-  margin-right: 20%; /* Keeps received messages on the left, but not beyond the middle */
-}
-.message-content {
-  margin-bottom: 2px;
-}
-
-.message-info {
-  font-size: 12px;
-  text-align: right;
-  color: gray;
-}
-
-.message-date {
-  padding-right: 10px;
-}
-.input-chat {
-  padding: 10px; /* padding for visual spacing */
-}
-.input-chat input {
-  justify-content: center;
-  width: 98%; /* Input field takes up all horizontal space */
-  padding: 8px; /* Padding inside the input field */
-  border: 1px solid #ccc; /* Slightly defined borders */
-  border-radius: 4px; /* Rounded corners */
 }
 
 .workspace-list-container {
@@ -196,6 +116,7 @@
   height: calc(100vh - 125px);
   overflow-y: auto; /* Enables vertical scrolling */
   overflow-x: hidden; /* Prevents horizontal scrolling */
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Styling workspace details: Channels and Direct Messages */

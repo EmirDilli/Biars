@@ -19,7 +19,8 @@ module.exports.getDm = async (req, res) => {
       })
       .populate({
         path: "user_id_2",
-      });
+      })
+      .populate({ path: "messages", options: { sort: { createdAt: -1 } } });
 
     // Determine the other user's ID
     const otherUser = dm.user_id_1._id.equals(userId)

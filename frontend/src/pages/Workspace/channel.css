@@ -1,0 +1,119 @@
+/* Keep chat header at the top */
+.chat-header-channel {
+  margin-top: 75px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Center items vertically */
+  padding: 10px; /* Adds padding inside the header */
+  background-color: #f0f0f0; /* Light background for the header */
+  border-bottom: 1px solid #ccc;
+}
+
+/* Style the info button */
+.info-button-channel {
+  background-color: #f0f0f0; /* Light background color */
+  border: none;
+  color: ButtonText;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: flex; /* Use flexbox */
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  font-size: 16px;
+  width: 40px; /* Adjust width as needed */
+  height: 40px; /* Adjust height as needed */
+  transition-duration: 0.4s;
+  cursor: pointer;
+  border-radius: 50%; /* Make it circular */
+}
+
+/* Lighter background on hover for the info button */
+.info-button-channel:hover {
+  background-color: #ccc;
+}
+
+/* Keep the input container at the bottom */
+.input-container-channel {
+  padding: 10px; /* padding for visual spacing */
+}
+
+.input-container-channel input {
+  width: calc(100% - 20px); /* Adjust width to account for padding */
+  padding: 8px; /* Padding inside the input field */
+  border: 1px solid #ccc; /* Slightly defined borders */
+  border-radius: 4px; /* Rounded corners */
+}
+
+/* Add margin to each message container to ensure space between message sets */
+.message-container {
+  margin-bottom: 20px;
+}
+
+/* Style for user info section */
+.user-info-channel {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px; /* Space between user info and the message */
+}
+
+/* Style for user image */
+.user-image-channel {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for user name */
+.user-name-channel {
+  font-size: 14px;
+  font-weight: bold;
+  margin-right: 10px; /* Space between name and date */
+}
+
+/* Style for message date */
+.message-date {
+  color: #666; /* Dimmed color for less emphasis */
+}
+
+/* Style for each message */
+.message-channel {
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 80%; /* Set max-width to prevent overly wide messages */
+  width: fit-content; /* Make width fit content */
+  background-color: #f0f0f0; /* Background for the message itself */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Style for sent messages */
+.sent {
+  background-color: #dcf8c6;
+  align-self: flex-end; /* Align sent messages to the right */
+}
+
+/* Style for received messages */
+.received {
+  align-self: flex-start; /* Align received messages to the left */
+  background-color: #a9ddf3;
+}
+.received-info {
+  display: flex;
+  justify-content: flex-start; /* Align contents to the left for received messages */
+  margin-right: 20%; /* Keeps received messages on the left, but not beyond the middle */
+}
+
+.sent-info {
+  display: flex;
+  justify-content: flex-end; /* Align contents to the right for sent messages */
+  margin-left: auto; /* Pushes sent messages to start from the middle of the chat */
+}
+
+.message-date-channel {
+  color: gray;
+  font-size: 12px;
+  text-align: right;
+}

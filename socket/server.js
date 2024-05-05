@@ -33,6 +33,7 @@ io.on("connection", (socket) => {
   // Handle sending a message to a specific room
   socket.on("sendMessage", ({ roomName, message }) => {
     io.to(roomName).emit("message", message); // Send message only to users in the room
+    console.log(`Message sent to room ${roomName}: ${message.text}`);
   });
 
   socket.on("disconnect", () => {
