@@ -19,10 +19,16 @@ const StatisticsTable = () => {
   const [semesters, setSemesters] = useState([]);
   const [startSemester, setStartSemester] = useState("");
   const [endSemester, setEndSemester] = useState("");
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     axios
-      .get(`/api/classes/${className}/statistics`)
+      .get(`http://localhost:3000/api/v1/class/${className}/statistics`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
       .then((response) => {
         const { statistics, earliestSemester, latestSemester } = response.data;
         setStatistics(statistics);
@@ -37,7 +43,13 @@ const StatisticsTable = () => {
     if (startSemester && endSemester) {
       axios
         .get(
-          `/api/classes/${className}/statistics?start=${startSemester}&end=${endSemester}`
+          `http://localhost:3000/api/v1/class/${className}/statistics?start=${startSemester}&end=${endSemester}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
         )
         .then((response) => {
           const { statistics, earliestSemester, latestSemester } =

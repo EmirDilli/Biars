@@ -16,10 +16,15 @@ import "jspdf-autotable";
 const AbsenteeismChart = () => {
   const { className } = useParams(); // Using useParams hook to get className
   const [chartData, setChartData] = useState({});
-
+  const token = localStorage.getItem("token");
   useEffect(() => {
     axios
-      .get(`/api/classes/${className}/absent_analysis`)
+      .get(`http://localhost:3000/api/v1/class/${className}/absent_analysis`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
       .then((response) => {
         const labels = response.data.ranges.map((range, index, array) =>
           index < array.length - 1

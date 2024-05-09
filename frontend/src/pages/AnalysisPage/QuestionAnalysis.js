@@ -18,12 +18,18 @@ const QuestionAnalysis = () => {
   const [analysisData, setAnalysisData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const token = localStorage.getItem("token");
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `/api/classes/${className}/question_analysis`
+          `http://localhost:3000/api/v1/class/${className}/question_analysis`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
         setAnalysisData(response.data);
         setLoading(false);

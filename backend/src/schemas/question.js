@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const questionSchema = new Schema({
-  file: String, // Assuming file type is Buffer
+  url: String, // Assuming file type is Buffer
   class: { type: mongoose.Schema.Types.ObjectId, ref: "Class" },
   topics: [String],
 });

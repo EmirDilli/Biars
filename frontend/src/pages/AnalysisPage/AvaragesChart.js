@@ -14,6 +14,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 
 const AveragesChart = () => {
+  const token = localStorage.getItem("token");
   const { className } = useParams();
   const [chartData, setChartData] = useState({});
   const [semesters, setSemesters] = useState([]);
@@ -21,10 +22,15 @@ const AveragesChart = () => {
   const [endSemester, setEndSemester] = useState("");
 
   useEffect(() => {
-    const endpoint = `/api/classes/${className}/averages`;
+    const endpoint = `http://localhost:3000/api/v1/class/${className}/averages`;
 
     axios
-      .get(endpoint)
+      .get(endpoint, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
       .then((response) => {
         const averages = response.data;
         const semesterOptions = Object.keys(averages).map((key) => ({
@@ -52,7 +58,13 @@ const AveragesChart = () => {
     if (startSemester && endSemester) {
       axios
         .get(
-          `/api/classes/${className}/averages?start=${startSemester}&end=${endSemester}`
+          `http://localhost:3000/api/v1/class/${className}/averages?start=${startSemester}&end=${endSemester}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
         )
         .then((response) => {
           const averages = response.data;

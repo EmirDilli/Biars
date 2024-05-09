@@ -15,11 +15,20 @@ import "jspdf-autotable";
 
 const ClassList = () => {
   const [classes, setClasses] = useState([]);
-
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
   useEffect(() => {
     axios
-      .get("/api/classes")
-      .then((response) => setClasses(response.data))
+      .get(`http://localhost:3000/api/v1/user/${userId}/classes`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        setClasses(response.data);
+      })
       .catch((error) => console.error("Error fetching classes:", error));
   }, []);
 
@@ -29,13 +38,23 @@ const ClassList = () => {
         <div key={index} className="class-box">
           <h3>{c.className}</h3>
           <div className="class-options">
-            <Link to={`/class/${c.code}/averages`}>Show Averages</Link> |
-            <Link to={`/class/${c.code}/absenteeism`}>Show Absenteeism</Link> |
-            <Link to={`/class/${c.code}/statistics`}>Show Summary</Link> |
-            <Link to={`/class/${c.code}/question_analysis`}>
+            <Link to={`/analysis/class/${c.code}/averages`}>Show Averages</Link>{" "}
+            |
+            <Link to={`/analysis/class/${c.code}/absenteeism`}>
+              Show Absenteeism
+            </Link>{" "}
+            |
+            <Link to={`/analysis/class/${c.code}/statistics`}>
+              Show Summary
+            </Link>{" "}
+            |
+            <Link to={`/analysis/class/${c.code}/question_analysis`}>
               Question Analysis
             </Link>{" "}
-            |<Link to={`/class/${c.code}/report`}>Report Generation</Link>
+            |
+            <Link to={`/analysis/class/${c.code}/report`}>
+              Report Generation
+            </Link>
           </div>
         </div>
       ))}

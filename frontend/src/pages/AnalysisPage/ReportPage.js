@@ -11,12 +11,20 @@ const ReportPage = () => {
   const [endSemester, setEndSemester] = useState("");
   const [semesters, setSemesters] = useState([]);
   const [stats, setStats] = useState([]);
-
+  const token = localStorage.getItem("token");
   useEffect(() => {
     // Fetch semesters when component mounts or className changes
     const fetchSemesters = async () => {
       try {
-        const { data } = await axios.get(`/api/classes/${className}/semesters`);
+        const { data } = await axios.get(
+          `http://localhost:3000/api/v1/class/${className}/semesters`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
         setSemesters(data);
       } catch (error) {
         console.error("Error fetching semesters:", error);
@@ -30,12 +38,25 @@ const ReportPage = () => {
 
   const handleGenerateReport = async () => {
     try {
-      const response = await axios.get(`/api/classes/${className}/report`, {
-        params: { start: startSemester, end: endSemester, stats: stats },
-      });
+      console.log(stats);
+      const response = await axios.get(
+        `http://localhost:3000/api/v1/class/${className}/report`,
 
-      const pdfGenerator = new HTMLReportGenerator(className);
-      await pdfGenerator.generateReport(response.data); // Pass the data to generate PDF
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          params: {
+            start: startSemester,
+            end: endSemester,
+            stats: stats,
+          },
+        }
+      );
+
+      const pdfGenerator = new PDFGenerator(className);
+      pdfGenerator.generateReport(response.data); // Pass the data to generate PDF
     } catch (error) {
       console.error("Error fetching or generating report:", error);
     }
@@ -60,8 +81,8 @@ const ReportPage = () => {
             onChange={(e) => setStartSemester(e.target.value)}
           >
             <option value="">Select Start Semester</option>
-            {semesters.map((semester) => (
-              <option key={semester} value={semester}>
+            {semesters.map((semester, index) => (
+              <option key={index} value={semester}>
                 {semester}
               </option>
             ))}
@@ -74,8 +95,8 @@ const ReportPage = () => {
             onChange={(e) => setEndSemester(e.target.value)}
           >
             <option value="">Select End Semester</option>
-            {semesters.map((semester) => (
-              <option key={semester} value={semester}>
+            {semesters.map((semester, index) => (
+              <option key={index} value={semester}>
                 {semester}
               </option>
             ))}

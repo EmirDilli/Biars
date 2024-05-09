@@ -7,6 +7,7 @@ const userRouter = require("./src/routes/user");
 const workspaceRouter = require("./src/routes/workpsace");
 const workspacesRouter = require("./src/routes/workspaces");
 const assessmentRouter = require("./src/routes/assessment");
+const classRouter = require("./src/routes/class");
 
 dotenv.config();
 const app = express();
@@ -29,7 +30,7 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/workspace", workspaceRouter);
 app.use("/api/v1/assessment", assessmentRouter);
 app.use("/api/v1/workspaces", workspacesRouter);
-
+app.use("/api/v1/class", classRouter);
 async function run() {
   mongoose
     .connect(process.env.CONNECTIONSTRING)
