@@ -5,7 +5,7 @@ import TopBar from "../../components/Topbar/Topbar"; // Assuming TopBar is in th
 
 const AssessmentPage = () => {
   const token = localStorage.getItem("token");
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
 
   // Function to determine the image source based on the file extension
   const getFileTypeIcon = (fileName) => {
@@ -28,46 +28,54 @@ const AssessmentPage = () => {
   };
 
   const handleDragOver = (event) => {
-    event.preventDefault(); // Prevent default behavior (Prevent file from being opened)
+    event.preventDefault();
   };
 
   const handleDrop = (event) => {
     event.preventDefault();
-    const files = event.dataTransfer.files;
-    if (files.length) {
-      setFile(files[0]);
+    const droppedFiles = event.dataTransfer.files;
+    if (droppedFiles.length) {
+      setFiles([...files, ...Array.from(droppedFiles)]);
     }
   };
 
   const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
+    setFiles([...files, ...Array.from(event.target.files)]);
+  };
+
+  const handleRemoveFile = (index) => {
+    setFiles(files.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!file) {
-      alert("No file selected!");
+    if (files.length === 0) {
+      alert("No files selected!");
       return;
     }
     const formData = new FormData();
-    formData.append("file", file);
+    files.forEach((file) => {
+      formData.append("files", file);
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: "Bearer your_bearer_token_here", // Replace with your actual bearer token
+      },
+    };
 
     try {
       const response = await axios.post(
         "http://localhost:3000/api/v1/assessment/uploadAssessment",
         formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
+        config
       );
-      console.log("File uploaded successfully:", response.data);
-      alert("File uploaded successfully!");
+      console.log("Files uploaded successfully:", response.data);
+      alert("Files uploaded successfully!");
     } catch (error) {
-      console.error("Error uploading file:", error);
-      alert("Error uploading file: " + error.message);
+      console.error("Error uploading files:", error);
+      alert("Error uploading files: " + error.message);
     }
   };
 
@@ -80,34 +88,44 @@ const AssessmentPage = () => {
           onDragOver={handleDragOver}
           onDrop={handleDrop}
         >
-          {file ? (
-            <>
-              <img src={getFileTypeIcon(file.name)} alt="file icon" />
-              <span>{file.name}</span>
-            </>
+          {files.length > 0 ? (
+            <div className="files-list">
+              {files.map((file, index) => (
+                <div key={index} className="file-item">
+                  <img src={getFileTypeIcon(file.name)} alt="file icon" />
+                  <span>{file.name}</span>
+                  <button
+                    onClick={() => handleRemoveFile(index)}
+                    className="remove-btn"
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+            </div>
           ) : (
-            "Drag and drop your file here"
+            "Drag and drop your files here or click to select files"
           )}
         </div>
         <button
           className="file-select-button"
           onClick={() => document.getElementById("fileInput").click()}
         >
-          Select File
+          Select Files
         </button>
         <input
           id="fileInput"
           type="file"
           onChange={handleFileChange}
           accept=".docx,.pdf,.png,.jpeg"
+          multiple
           style={{ display: "none" }}
         />
-        <button onClick={handleSubmit} disabled={!file}>
-          Upload File
+        <button onClick={handleSubmit} disabled={files.length === 0}>
+          Upload Files
         </button>
       </div>
     </div>
   );
 };
-
 export default AssessmentPage;

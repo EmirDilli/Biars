@@ -5,6 +5,13 @@ import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import Workspace from "./pages/Workspace/Chat";
 import Assessment from "./pages/AssessmentPage/AssessmentPage";
+import Event from "./pages/EventPage/EventPage";
+import AbsenteeisChart from "./pages/AnalysisPage/AbsenteeimChart";
+import AveragesChart from "./pages/AnalysisPage/AvaragesChart";
+import ClassList from "./pages/AnalysisPage/ClassList";
+import QuestionAnalysis from "./pages/AnalysisPage/QuestionAnalysis";
+import ReportPage from "./pages/AnalysisPage/ReportPage";
+import StaticsTable from "./pages/AnalysisPage/StaticsTable";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -55,6 +62,28 @@ function App() {
         path="/assessment"
         element={authenticated ? <Assessment /> : <Navigate to="/login" />}
       />
+      <Route
+        path="/event"
+        element={authenticated ? <Event /> : <Navigate to="/login" />}
+      />
+      <Route path="analysis/" element={<ClassList />} />
+      <Route
+        path="analysis/class/:className/averages"
+        element={<AveragesChart />}
+      />
+      <Route
+        path="analysis/class/:className/absenteeism"
+        element={<AbsenteeisChart />}
+      />
+      <Route
+        path="analysis/class/:className/statistics"
+        element={<StaticsTable />}
+      />
+      <Route
+        path="analysis/class/:className/question_analysis"
+        element={<QuestionAnalysis />}
+      />
+      <Route path="analysis/class/:className/report" element={<ReportPage />} />
     </Routes>
   );
 }

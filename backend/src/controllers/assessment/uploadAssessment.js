@@ -21,20 +21,22 @@ const s3Client = new S3Client({
 
 module.exports.uploadAsssessment = async (req, res) => {
   try {
-    const file = req.file;
+    const files = req.files;
 
-    console.log(file.originalname);
-    const params = {
-      Bucket: "cs319",
-      Body: file.buffer, // The path to the directory you want to upload the object to, starting with your Space name.
-      Key: `assessments/${file.originalname}`, // Object key, referenced whenever you want to access this file later.
-      ACL: "public-read", // Defines ACL permissions, such as private or public.
-    };
-    const data = await s3Client.send(new PutObjectCommand(params));
-    console.log(data);
-    console.log(
-      "Successfully uploaded object: " + params.Bucket + "/" + params.Key
-    );
+    for (const file of files) {
+      const params = {
+        Bucket: "cs319",
+        Body: file.buffer,
+        Key: `semester/ /${file.originalname}`,
+        ACL: "public-read",
+      };
+
+      const data = await s3Client.send(new PutObjectCommand(params));
+      console.log(
+        "Successfully uploaded object: " + params.Bucket + "/" + params.Key
+      );
+    }
+
     return res.status(200).json(generateResponse("Success", {}));
   } catch (error) {
     return res.status(500).json(generateResponse("Server Error", { error }));

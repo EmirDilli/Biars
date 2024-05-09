@@ -64,7 +64,28 @@ export default function CreateWorkspaceModal({
     }
   }
   function handleCreateWorkspace() {
-    setShowError(true);
+    async function save() {
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/workspace/createWorkspace",
+        {
+          workspace: {
+            name: workspaceName,
+            isPublic: isPublic,
+            invited_users: selectedUsers,
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setCreateModalOpen(false);
+      setIsOpen(false);
+
+      alert("sucess");
+    }
+    save();
   }
   const handleShowSuccess = () => {
     setShowSuccess(true);

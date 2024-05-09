@@ -1,11 +1,25 @@
 import React, { useState } from "react";
 
 // Simple modal component
-export default function Modal({ isOpen, setIsOpen, onCreate, onJoin }) {
+export default function Modal({
+  isOpen,
+  setIsOpen,
+  isJoinModalOpen,
+  setJoinModalOpen,
+  isCreateModalOpen,
+  setCreateModalOpen,
+}) {
   function closeModal() {
     setIsOpen(false);
   }
-
+  function onCreate() {
+    setIsOpen(false);
+    setCreateModalOpen(true);
+  }
+  function onJoin() {
+    setIsOpen(false);
+    setJoinModalOpen(true);
+  }
   if (!isOpen) return null;
 
   return (

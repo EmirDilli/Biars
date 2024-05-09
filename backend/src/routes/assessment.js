@@ -11,7 +11,7 @@ const router = Router();
 router.post(
   "/uploadAssessment",
   isAuth,
-  upload.single("file"),
+  upload.array("files", 10),
   uploadAsssessment
 );
 

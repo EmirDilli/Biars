@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Topbar from "../../components/Topbar/Topbar";
 import CreateJoinWorkspaceModal from "./CreateJoinWorkspaceModal";
 import CreateWorkspaceModal from "./CreateWorkspaceModal";
+import JoinWorkspaceModal from "./JoinWorkspaceModal";
 import { Info } from "@mui/icons-material";
 import io from "socket.io-client";
 
@@ -32,6 +33,7 @@ function Workspace() {
   const [isCreateWorkspaceModalOpen, setIsCreateWorkspaceModalOpen] =
     useState(false);
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
+  const [isJoinModalOpen, setJoinModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -289,14 +291,22 @@ function Workspace() {
           <CreateJoinWorkspaceModal
             isOpen={isCreateWorkspaceModalOpen}
             setIsOpen={setIsCreateWorkspaceModalOpen}
-            onCreate={handleCreateWorkspace}
-            onJoin={handleJoinWorkspace}
+            isJoinModalOpen={isJoinModalOpen}
+            setJoinModalOpen={setJoinModalOpen}
+            isCreateModalOpen={isCreateModalOpen}
+            setCreateModalOpen={setCreateModalOpen}
           />
           <CreateWorkspaceModal
             isOpen={isCreateWorkspaceModalOpen}
             setIsOpen={setIsCreateWorkspaceModalOpen}
             isCreateModalOpen={isCreateModalOpen}
             setCreateModalOpen={setCreateModalOpen}
+          />
+          <JoinWorkspaceModal
+            isOpen={isCreateWorkspaceModalOpen}
+            setIsOpen={setIsCreateWorkspaceModalOpen}
+            isJoinModalOpen={isJoinModalOpen}
+            setJoinModalOpen={setJoinModalOpen}
           />
         </div>
       </div>

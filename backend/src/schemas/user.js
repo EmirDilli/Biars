@@ -7,7 +7,7 @@ const userSchema = new Schema({
   surname: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  isAdmin: { type: Number, required: true },
+  type: { type: Number, required: true },
   profileUrl: String,
   bearerToken: String,
   workspaces: [Schema.Types.ObjectId],

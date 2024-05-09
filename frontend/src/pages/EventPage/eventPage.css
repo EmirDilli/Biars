@@ -1,0 +1,24 @@
+/* Event details panel styling */
+.event-details {
+  flex: 0 0 30%; /* 30% width and not grow or shrink */
+  padding: 20px; /* consistent spacing inside the details container */
+  background-color: #f8f9fa; /* a light background color for the details panel */
+  overflow-y: auto; /* makes the panel scrollable if content is too long */
+}
+
+/* Additional style enhancements */
+.fc-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+}
+
+.fc-button:hover {
+  background-color: #0056b3;
+}
+
+.fc-event {
+  cursor: pointer;
+}

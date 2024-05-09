@@ -10,6 +10,7 @@ const { getChannel } = require("../controllers/workpsace/getChannel");
 const {
   saveChannelMessage,
 } = require("../controllers/workpsace/saveChannelMessage");
+const { createWorkspace } = require("../controllers/workpsace/createWorkspace");
 
 const router = Router();
 
@@ -19,5 +20,6 @@ router.get("/dm/:dm_id", isAuth, getDm);
 router.post("/dm/saveMessage", isAuth, saveDmMessage);
 router.get("/channel/:channel_id", isAuth, getChannel);
 router.post("/channel/saveMessage", isAuth, saveChannelMessage);
+router.post("/createWorkspace", isAuth, createWorkspace);
 
 module.exports = router;
