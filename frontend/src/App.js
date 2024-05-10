@@ -13,6 +13,7 @@ import QuestionAnalysis from "./pages/AnalysisPage/QuestionAnalysis";
 import ReportPage from "./pages/AnalysisPage/ReportPage";
 import StaticsTable from "./pages/AnalysisPage/StaticsTable";
 import Admin from "./pages/AdminMainPage/AdminPage";
+import ClassSections from "./pages/ClassPage/Grading";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -90,6 +91,7 @@ function App() {
         element={<QuestionAnalysis />}
       />
       <Route path="analysis/class/:className/report" element={<ReportPage />} />
+      <Route path="class/:className/grading" element={<ClassSections />} />
     </Routes>
   );
 }

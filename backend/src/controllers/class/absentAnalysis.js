@@ -1,5 +1,5 @@
 const { calculateAttendanceBracket } = require("../../utils/calculations");
-const { ClassSemester, Class } = require("../../schemas/index");
+const { ClassSemester, Class, Semester } = require("../../schemas/index");
 
 module.exports.absentAnalysis = async (req, res) => {
   const classCode = req.params.className;
@@ -8,10 +8,12 @@ module.exports.absentAnalysis = async (req, res) => {
     if (!classObj) {
       return res.status(404).json({ error: "Class not found" });
     }
+    
+    const activeSemester = await Semester.findOne({status: "active"}).select('_id');
 
     const classSemesters = await ClassSemester.find({
       class: classObj._id,
-      status: "completed",
+      semester: {$ne: activeSemester}
     })
       .populate("portfolio")
       .populate({ path: "assessments.assessment", select: "weight" });

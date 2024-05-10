@@ -1,5 +1,5 @@
 const { calculateStatistics } = require("../../utils/calculations");
-const { ClassSemester, Class } = require("../../schemas/index");
+const { ClassSemester, Class, Semester } = require("../../schemas/index");
 
 module.exports.classStatistic = async (req, res) => {
   const classCode = req.params.className;
@@ -11,9 +11,11 @@ module.exports.classStatistic = async (req, res) => {
       return res.status(404).json({ error: "Class not found" });
     }
 
+    const activeSemester = await Semester.findOne({status: "active"}).select('_id');
+
     let filter = {
       class: classObj._id,
-      status: "completed",
+      semester: {$ne: activeSemester}
     };
 
     if (start && end) {

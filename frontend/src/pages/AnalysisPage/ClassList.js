@@ -55,6 +55,10 @@ const ClassList = () => {
             <Link to={`/analysis/class/${c.code}/report`}>
               Report Generation
             </Link>
+            |
+            <Link to={`/class/${c.code}/grading`}>
+              Grading
+            </Link>
           </div>
         </div>
       ))}
