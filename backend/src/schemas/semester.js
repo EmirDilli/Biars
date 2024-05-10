@@ -12,8 +12,15 @@ const semesterSchema = new mongoose.Schema({
   status: { type: String, enum: ["active", "completed"], default: "active" },
   classSemesters: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.SchemaTypes.ObjectId,
       ref: "ClassSemester",
+    },
+  ],
+  weeks: [
+    {
+      weekId: Number,
+      startDate: mongoose.SchemaTypes.Date,
+      endDate: mongoose.SchemaTypes.Date,
     },
   ],
 });

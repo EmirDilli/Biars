@@ -67,10 +67,35 @@ module.exports.createSemester = async (req, res) => {
       startDate: req.body.start,
       endDate: req.body.end,
     });
-
-    await currenSemester.save();
+    const startDate = new Date(req.body.start);
+    const endDate = new Date(req.body.end);
+    const semesterWeeks = generateWeeks(startDate, endDate);
+    currenSemester.weeks = semesterWeeks;
+    currenSemester.save();
+    //await currenSemester.save();
     return res.status(200).json(generateResponse("Success!", nextSemesterId));
   } catch (error) {
     return res.status(500).json(generateResponse("Server Error", { error }));
   }
 };
+function generateWeeks(startDate, endDate) {
+  const weeks = [];
+  let currentWeekStartDate = new Date(startDate);
+  let currentWeekEndDate = new Date(startDate);
+  currentWeekEndDate.setDate(currentWeekStartDate.getDate() + 6);
+
+  let weekId = 1;
+  while (currentWeekEndDate <= endDate) {
+    weeks.push({
+      weekId,
+      startDate: currentWeekStartDate.toISOString().split("T")[0],
+      endDate: currentWeekEndDate.toISOString().split("T")[0],
+    });
+
+    currentWeekStartDate.setDate(currentWeekStartDate.getDate() + 7);
+    currentWeekEndDate.setDate(currentWeekEndDate.getDate() + 7);
+    weekId++;
+  }
+
+  return weeks;
+}

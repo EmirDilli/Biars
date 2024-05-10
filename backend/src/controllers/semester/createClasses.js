@@ -81,6 +81,7 @@ async function parseCSVData(buffer, activeSemester) {
       maxEnrollment: parseInt(row["MaxEnrollment"]),
       classSemester: classSemesters[classCode]._id,
       schedule: schedule,
+      sectionNumber: classSemesters[classCode].sections.length + 1 + "",
     });
 
     const sectionDb = await section.save();
