@@ -9,6 +9,7 @@ const semesterSchema = new mongoose.Schema({
   },
   startDate: Date,
   endDate: Date,
+  status: { type: String, enum: ["active", "completed"], default: "active" },
   classSemesters: [
     {
       type: mongoose.Schema.Types.ObjectId,

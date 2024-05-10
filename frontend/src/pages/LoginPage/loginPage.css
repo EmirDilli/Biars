@@ -11,7 +11,7 @@
   padding: 40px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* This adds a subtle shadow to the form */
-  width: 300px; /* Adjust width as necessary */
+  width: 25%; /* Adjust width as necessary */
   position: relative; /* Positioning context for absolute positioned elements inside */
 }
 
@@ -39,9 +39,7 @@ label {
 
 input[type="text"],
 input[type="password"] {
-  width: calc(
-    100% - 22px
-  ); /* Adjusted width to accommodate padding and border */
+  width: calc(100%); /* Adjusted width to accommodate padding and border */
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 3px;

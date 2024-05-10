@@ -64,7 +64,7 @@ export default function SearchWorkspacePopup({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          width: "90%",
+          width: "100%",
         }}
       >
         <span

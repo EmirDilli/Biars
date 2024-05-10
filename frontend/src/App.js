@@ -12,10 +12,12 @@ import ClassList from "./pages/AnalysisPage/ClassList";
 import QuestionAnalysis from "./pages/AnalysisPage/QuestionAnalysis";
 import ReportPage from "./pages/AnalysisPage/ReportPage";
 import StaticsTable from "./pages/AnalysisPage/StaticsTable";
+import Admin from "./pages/AdminMainPage/AdminPage";
 
 function App() {
   const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
+  const [type, setType] = useState(-1);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -46,6 +48,10 @@ function App() {
   }
   return (
     <Routes>
+      <Route
+        path="/admin"
+        element={<Admin setAuthenticated={setAuthenticated} />}
+      />
       <Route
         path="/login"
         element={<LoginPage setAuthenticated={setAuthenticated} />}

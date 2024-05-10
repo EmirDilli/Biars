@@ -24,10 +24,12 @@ export default function LoginPage({ setAuthenticated }) {
       if (response.status === 200) {
         localStorage.setItem("token", response.data.data.user.bearerToken);
         localStorage.setItem("userId", response.data.data.user._id);
+        localStorage.setItem("type", response.data.data.user.type);
 
         setAuthenticated(true);
 
-        navigate("/main");
+        if (response.data.data.user.type == 0) navigate("/admin");
+        else navigate("/main");
       } else {
         setError("Invalid username or password");
       }

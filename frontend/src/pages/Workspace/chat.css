@@ -64,7 +64,7 @@
 
 .workspace-item {
   background-color: #9a9180;
-  width: calc(100% - 40px);
+  width: 100%;
   color: #fff;
   padding: 12px 20px;
   margin: 5px 0; /* Reduced margin to decrease space between items */

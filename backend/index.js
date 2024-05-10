@@ -8,6 +8,7 @@ const workspaceRouter = require("./src/routes/workpsace");
 const workspacesRouter = require("./src/routes/workspaces");
 const assessmentRouter = require("./src/routes/assessment");
 const classRouter = require("./src/routes/class");
+const semesterRouter = require("./src/routes/semester");
 
 dotenv.config();
 const app = express();
@@ -31,6 +32,7 @@ app.use("/api/v1/workspace", workspaceRouter);
 app.use("/api/v1/assessment", assessmentRouter);
 app.use("/api/v1/workspaces", workspacesRouter);
 app.use("/api/v1/class", classRouter);
+app.use("/api/v1/semester", semesterRouter);
 async function run() {
   mongoose
     .connect(process.env.CONNECTIONSTRING)

@@ -1,4 +1,5 @@
 const { Router } = require("express");
+
 const { calculateAverages } = require("../controllers/class/classAverages");
 const { isAuth } = require("../utils/isAuth");
 const { absentAnalysis } = require("../controllers/class/absentAnalysis");

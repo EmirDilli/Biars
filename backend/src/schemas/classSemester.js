@@ -5,11 +5,7 @@ const classSemesterSchema = new mongoose.Schema({
   class: { type: mongoose.Schema.Types.ObjectId, ref: "Class" },
   semester: { type: mongoose.Schema.Types.ObjectId, ref: "Semester" },
   name: String,
-  status: {
-    type: String,
-    enum: ["active", "upcoming", "completed"],
-    default: "upcoming",
-  },
+
   instructors: [{ type: mongoose.Schema.Types.ObjectId, ref: "Instructor" }],
   tas: [{ type: mongoose.Schema.Types.ObjectId, ref: "TA" }],
   sections: [{ type: mongoose.Schema.Types.ObjectId, ref: "Section" }],
