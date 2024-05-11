@@ -1,0 +1,49 @@
+.schedule-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  background-color: #f0f0f0;
+}
+
+.day-column {
+  flex: 1;
+  background-color: #ffffff;
+  margin: 10px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.class-hour {
+  padding: 10px;
+  margin: 5px;
+  background-color: #e8e8e8;
+  border-radius: 5px;
+}
+
+/* Different color for lecture hours */
+.lecture-hour {
+  background-color: #b3e6ff;
+}
+
+/* Different color for lab hours */
+.lab-hour {
+  background-color: #ffcc99; /* Light orange */
+}
+
+/* Different color for spare hours */
+.spare-hour {
+  background-color: #ffcccc;
+}
+
+/* Different color for free hours */
+.free-hour {
+  background-color: #f0f0f0;
+}
+
+.class-time {
+  font-weight: bold;
+}
+
+.class-name {
+  display: block;
+}

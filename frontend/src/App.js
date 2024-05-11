@@ -16,6 +16,8 @@ import Admin from "./pages/AdminMainPage/AdminPage";
 import ClassSections from "./pages/ClassPage/Grading";
 import WeeklySchedule from "./pages/ClassPage/MainPage";
 
+import Schedule from "./pages/SchedulePage/SchedulePage";
+
 function App() {
   const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
@@ -65,6 +67,10 @@ function App() {
       <Route
         path="/workspace"
         element={authenticated ? <Workspace /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/schedule"
+        element={authenticated ? <Schedule /> : <Navigate to="/login" />}
       />
       <Route
         path="/assessment"
