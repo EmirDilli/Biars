@@ -13,7 +13,7 @@ const ContentItem = ({ item }) => {
       case "pdf":
         return (
           <img
-            src={"assets/pdf-icon.png"}
+            src={"/assets/pdf-icon.png"}
             alt="pdf"
             style={{ width: "24px" }}
           />
@@ -21,7 +21,7 @@ const ContentItem = ({ item }) => {
       case "docx":
         return (
           <img
-            src={"assets/docx-icon.png"}
+            src={"/assets/docx-icon.png"}
             alt="docx"
             style={{ width: "24px" }}
           />

@@ -1,6 +1,19 @@
 const { response } = require("express");
 const { Semester } = require("../../schemas/index");
+const { PutObjectCommand, S3Client } = require("@aws-sdk/client-s3");
 const { generateResponse } = require("../../utils/response");
+const dotenv = require("dotenv");
+dotenv.config();
+
+const s3Client = new S3Client({
+  endpoint: "https://fra1.digitaloceanspaces.com", // Find your endpoint in the control panel, under Settings. Prepend "https://".
+  forcePathStyle: false, // Configures to use subdomain/virtual calling format.
+  region: "fra1", // Must be "us-east-1" when creating new Spaces. Otherwise, use the region in your endpoint (for example, nyc3).
+  credentials: {
+    accessKeyId: "DO00CT92KUAAMFDT7JAF", // Access key pair. You can create access key pairs using the control panel or API.
+    secretAccessKey: process.env.BUCKET_SECRET_KEY, // Secret access key defined through an environment variable.
+  },
+});
 
 /**
  * @param {import('express').Request} req
@@ -71,7 +84,13 @@ module.exports.createSemester = async (req, res) => {
     const endDate = new Date(req.body.end);
     const semesterWeeks = generateWeeks(startDate, endDate);
     currenSemester.weeks = semesterWeeks;
-    currenSemester.save();
+    await currenSemester.save();
+    const params = {
+      Bucket: "cs319", // Replace with your DigitalOcean Space name
+      Key: `${nextSemesterId}/`, // Append a '/' to the folder name
+    };
+    await s3Client.send(new PutObjectCommand(params));
+
     //await currenSemester.save();
     return res.status(200).json(generateResponse("Success!", nextSemesterId));
   } catch (error) {

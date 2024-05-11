@@ -10,7 +10,20 @@ const {
 } = require("../../schemas/index");
 const { generateResponse } = require("../../utils/response");
 const { Readable } = require("stream");
+const { PutObjectCommand, S3Client } = require("@aws-sdk/client-s3");
+const dotenv = require("dotenv");
 const csv = require("csv-parser");
+dotenv.config();
+
+const s3Client = new S3Client({
+  endpoint: "https://fra1.digitaloceanspaces.com", // Find your endpoint in the control panel, under Settings. Prepend "https://".
+  forcePathStyle: false, // Configures to use subdomain/virtual calling format.
+  region: "fra1", // Must be "us-east-1" when creating new Spaces. Otherwise, use the region in your endpoint (for example, nyc3).
+  credentials: {
+    accessKeyId: "DO00CT92KUAAMFDT7JAF", // Access key pair. You can create access key pairs using the control panel or API.
+    secretAccessKey: process.env.BUCKET_SECRET_KEY, // Secret access key defined through an environment variable.
+  },
+});
 
 module.exports.createClasses = async (req, res) => {
   try {
@@ -35,6 +48,12 @@ async function parseCSVData(buffer, activeSemester) {
   const processRow = async (row) => {
     let classCode = row["ClassCode"];
     if (!classSemesters[classCode]) {
+      const params = {
+        Bucket: "cs319", // Replace with your DigitalOcean Space name
+        Key: `${activeSemester.semesterId}/${classCode}/Documents`, // Append a '/' to the folder name
+      };
+      await s3Client.send(new PutObjectCommand(params));
+
       const classObj = await Class.findOne({ code: classCode });
       if (!classObj) return;
 
@@ -83,6 +102,12 @@ async function parseCSVData(buffer, activeSemester) {
       schedule: schedule,
       sectionNumber: classSemesters[classCode].sections.length + 1 + "",
     });
+
+    const params = {
+      Bucket: "cs319", // Replace with your DigitalOcean Space name
+      Key: `${activeSemester.semesterId}/${classCode}/${section.sectionNumber}/`, // Append a '/' to the folder name
+    };
+    await s3Client.send(new PutObjectCommand(params));
 
     const sectionDb = await section.save();
     classSemesters[classCode].sections.push(sectionDb._id);
