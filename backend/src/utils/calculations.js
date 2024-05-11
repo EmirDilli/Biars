@@ -21,7 +21,15 @@ async function calculateAverages(classSemesters) {
       weightTotal > 0 ? (weightedSum / weightTotal).toFixed(2) : 0;
   }
 
-  return averages;
+  const response = {};
+  for (const key in averages) {
+    if (averages.hasOwnProperty(key)) {
+      const yearSemester = key.match(/\d{4}[FS]/)[0];
+      response[yearSemester] = averages[key];
+    }
+  }
+
+  return response;
 }
 
 async function calculateAttendanceBracket(classSemesters) {
@@ -51,7 +59,7 @@ async function calculateAttendanceBracket(classSemesters) {
   );
 
   return {
-    ranges: absentRanges.concat([`${absentRanges[absentRanges.length - 1]}+`]),
+    ranges: absentRanges,
     avgGrades: averages,
   };
 }

@@ -34,7 +34,7 @@ const AveragesChart = () => {
       .then((response) => {
         const averages = response.data;
         const semesterOptions = Object.keys(averages).map((key) => ({
-          value: key.substring(key.indexOf("(") + 1, key.indexOf(")")),
+          value: key,
           label: key,
         }));
         setSemesters(semesterOptions);

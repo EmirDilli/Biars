@@ -9,7 +9,6 @@ const { ClassSemester, Class, Semester } = require("../../schemas/index");
 module.exports.report = async (req, res) => {
   const { className } = req.params;
   const { start, end, stats } = req.query;
-  console.log(start, end, stats);
 
   try {
     const classObj = await Class.findOne({ code: className });

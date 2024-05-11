@@ -7,7 +7,7 @@ const assessmentSchema = new mongoose.Schema({
   course: { type: mongoose.Schema.Types.ObjectId, ref: "ClassSemester" },
   type: {
     type: String,
-    enum: ["exam", "final", "quiz", "homework", "project"],
+    enum: ["exam", "final", "quiz", "homework", "project", "other"],
     required: true,
   },
   questions: [

@@ -141,6 +141,7 @@ const ReportPage = () => {
     </div>
   );
 };
+
 class PDFGenerator {
   constructor(className) {
     this.doc = new jsPDF();
@@ -148,51 +149,38 @@ class PDFGenerator {
   }
 
   async generateReport(data) {
+    this.doc.setFont('Helvetica');
+    this.doc.setFontSize(12);
+    
+    // Initialize the PDF with a title
+    this.doc.text(`Class Report: ${this.className}`, 10, 10);
+
     if (data.averages) {
       const chartData = {
         labels: Object.keys(data.averages),
         data: Object.values(data.averages),
       };
-
-      await this.addChartToPDF(
-        chartData,
-        "Term Average",
-        "line",
-        "rgb(75, 192, 192)"
-      );
+      await this.addChartToPDF(chartData, "Term Average", "line", "rgb(75, 192, 192)");
     }
 
     if (data.attendance) {
-      // Format data for absenteeism bar chart
       const labels = data.attendance.ranges.map((range, index, array) =>
         index < array.length - 1 ? `${range}-${array[index + 1]}` : `${range}+`
       );
-
-      console.log(data.attendance.avgGrades);
       const chartData = {
         labels: labels,
         data: data.attendance.avgGrades,
       };
-
-      await this.addChartToPDF(
-        chartData,
-        "Average Grade by Absenteeism",
-        "bar",
-        "rgba(255, 99, 132, 0.5)"
-      );
+      await this.addChartToPDF(chartData, "Average Grade by Absenteeism", "bar", "rgba(255, 99, 132, 0.5)");
     }
 
     if (data.statistics) {
-      console.log(data.statistics);
       const statsData = [
         ["Mean Exam Score", data.statistics.meanExamScore?.toFixed(2)],
         ["Std Dev Exam Score", data.statistics.stdDevExamScore?.toFixed(2)],
         ["Mean Final Score", data.statistics.meanFinalScore?.toFixed(2)],
         ["Std Dev Final Score", data.statistics.stdDevFinalScore?.toFixed(2)],
-        [
-          "Mean Homework/Quiz/Project Score",
-          data.statistics.meanHomeworkQuizProjectScore?.toFixed(2),
-        ],
+        ["Mean Homework/Quiz/Project Score", data.statistics.meanHomeworkQuizProjectScore?.toFixed(2)],
         ["Mean Absent Count", data.statistics.meanAbsentCount?.toFixed(2)],
       ];
       const statsHeaders = ["Statistic", "Value"];
@@ -204,22 +192,13 @@ class PDFGenerator {
         ([topic, scores]) => [
           topic,
           scores.exam >= 0 ? (scores.exam * 100).toFixed(2) + "%" : "N/A",
-          scores.homework >= 0
-            ? (scores.homework * 100).toFixed(2) + "%"
-            : "N/A",
+          scores.homework >= 0 ? (scores.homework * 100).toFixed(2) + "%" : "N/A",
           scores.quiz >= 0 ? (scores.quiz * 100).toFixed(2) + "%" : "N/A",
           scores.project >= 0 ? (scores.project * 100).toFixed(2) + "%" : "N/A",
           scores.total >= 0 ? (scores.total * 100).toFixed(2) + "%" : "N/A",
         ]
       );
-      const qaHeaders = [
-        "Topic",
-        "Exams",
-        "Homeworks",
-        "Quizzes",
-        "Projects",
-        "Total",
-      ];
+      const qaHeaders = ["Topic", "Exams", "Homeworks", "Quizzes", "Projects", "Total"];
       this.addTableToPDF("Question Analysis", qaHeaders, questionAnalysisData);
     }
 
@@ -229,51 +208,85 @@ class PDFGenerator {
   async addChartToPDF(chartData, label, type, borderColor) {
     return new Promise((resolve, reject) => {
       const chartCanvas = document.createElement("canvas");
+      chartCanvas.width = 800;  // Increased width for better aspect ratio
+      chartCanvas.height = 400; // Increased height for better aspect ratio
+      chartCanvas.style.display = "none"; // Ensure canvas is not visible
+  
       document.body.appendChild(chartCanvas);
-      chartCanvas.style.display = "none";
-      const ctx = chartCanvas.getContext("2d");
+      const ctx = chartCanvas.getContext('2d');
+  
+      // Dynamically determine the max and min for y-axis based on data
+      let minY = Math.min(...chartData.data) * 0.9;
+      let maxY = Math.max(...chartData.data) * 1.1;
+  
       const chart = new Chart(ctx, {
-        type: type,
-        data: {
-          labels: chartData.labels,
-          datasets: [
-            {
+          type: type,
+          data: {
+            labels: chartData.labels,
+            datasets: [{
               label: label,
               data: chartData.data,
-              fill: false,
+              fill: type !== 'line',
               borderColor: borderColor,
-              backgroundColor: borderColor,
-              tension: 0.1,
-            },
-          ],
-        },
-        options: {
-          animation: {
-            onComplete: () => {
-              const chartImageUrl = chart.toBase64Image();
-              this.doc.addPage();
-              this.doc.text(label, 10, 10);
-              this.doc.addImage(chartImageUrl, "PNG", 15, 20, 180, 90);
-              chart.destroy();
-              document.body.removeChild(chartCanvas);
-              resolve();
-            },
+              backgroundColor: type === 'bar' ? 'rgba(255, 99, 132, 0.5)' : borderColor,
+              borderWidth: 1,
+              tension: 0.1
+            }],
           },
-        },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: false,
+                min: minY,
+                max: maxY
+              },
+              x: {
+                ticks: {
+                  autoSkip: false,
+                  maxRotation: 90,
+                  minRotation: 90
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                display: true,
+                position: 'top'
+              }
+            },
+            responsive: true,
+            maintainAspectRatio: false // Set to false to maintain the custom aspect ratio
+          }
       });
+  
+      setTimeout(() => {
+        this.doc.addPage(); // Add a new page for each chart
+        this.doc.text(label, 10, 10);
+        this.doc.addImage(chart.toBase64Image(), 'PNG', 15, 20, 180, 90);
+        chart.destroy();
+        document.body.removeChild(chartCanvas);
+        resolve();
+      }, 150); // Short delay to ensure the chart renders fully on the canvas
     });
   }
+  
 
   addTableToPDF(title, headers, body) {
     this.doc.addPage();
     this.doc.text(title, 10, 10);
     this.doc.autoTable({
+      startY: 20,
       head: [headers],
       body: body,
-      startY: 20,
+      theme: 'striped',
+      styles: { fontSize: 10, cellPadding: 2 },
+      headStyles: { fillColor: [22, 160, 133] }
     });
   }
 }
+
+
+
 
 class HTMLReportGenerator {
   constructor(className) {

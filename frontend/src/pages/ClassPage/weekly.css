@@ -1,0 +1,19 @@
+.weekly-schedule-container {
+    margin: 20px;
+    padding: 10px;
+    background-color: #f5f5f5;
+  }
+  
+  .week-section {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    padding: 15px;
+    border-left: 5px solid #4CAF50; /* Stylish green left border */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+  }
+  
+  .week-section h2 {
+    color: #333;
+    font-size: 1.25rem; /* Adjust size as needed */
+  }

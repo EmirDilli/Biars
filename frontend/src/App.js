@@ -14,6 +14,7 @@ import ReportPage from "./pages/AnalysisPage/ReportPage";
 import StaticsTable from "./pages/AnalysisPage/StaticsTable";
 import Admin from "./pages/AdminMainPage/AdminPage";
 import ClassSections from "./pages/ClassPage/Grading";
+import WeeklySchedule from "./pages/ClassPage/MainPage";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -92,6 +93,7 @@ function App() {
       />
       <Route path="analysis/class/:className/report" element={<ReportPage />} />
       <Route path="class/:className/grading" element={<ClassSections />} />
+      <Route path="weekly" element={<WeeklySchedule />} />
     </Routes>
   );
 }

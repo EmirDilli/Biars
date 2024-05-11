@@ -8,6 +8,7 @@ const { questionAnalysis } = require("../controllers/class/questionAnalysis");
 const { report } = require("../controllers/class/report");
 const { getSemester } = require("../controllers/class/getSemesters");
 const { activeSemesters } = require("../controllers/class/activeSemesters");
+const { weekly } = require("../controllers/weekly/weekly");
 
 
 const router = Router();
@@ -18,4 +19,5 @@ router.get("/:className/question_analysis", isAuth, questionAnalysis);
 router.get("/:className/report", isAuth, report);
 router.get("/:className/semesters", isAuth, getSemester);
 router.get("/:className/activeSemesters", isAuth, activeSemesters);
+router.get("/:className/:sectionNumber/weekly", isAuth, weekly);
 module.exports = router;

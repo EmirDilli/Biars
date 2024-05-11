@@ -10,7 +10,7 @@ const sectionSchema = new mongoose.Schema({
   schedule: [[String]],
   students: [{ type: mongoose.Schema.Types.ObjectId, ref: "Student" }],
   maxEnrollment: Number,
-  weeklyConent: [{ weekId: Number, entries: [{}] }],
+  weeklyContent: [{ weekId: Number, entries: [{}] }],
 });
 const Section = mongoose.model("Section", sectionSchema);
 
