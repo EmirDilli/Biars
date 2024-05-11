@@ -99,7 +99,10 @@ function App() {
       />
       <Route path="analysis/class/:className/report" element={<ReportPage />} />
       <Route path="class/:className/grading" element={<ClassSections />} />
-      <Route path="weekly" element={<WeeklySchedule />} />
+      <Route
+        path="class/:className/:sectionNumber/weekly"
+        element={<WeeklySchedule />}
+      />
     </Routes>
   );
 }

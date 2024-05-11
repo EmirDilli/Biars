@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import Topbar from "../../components/Topbar/Topbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import axios from "axios";
-import "./homePage.css"; // Ensure this is the path to your CSS file
+import { useNavigate } from "react-router-dom";
+import "./homePage.css";
 
 export default function HomePageStudent() {
   const userId = localStorage.getItem("userId");
@@ -10,6 +11,7 @@ export default function HomePageStudent() {
   const [classes, setClasses] = useState([]);
   const [selectedClass, setSelectedClass] = useState(null);
   const [modalContent, setModalContent] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
@@ -33,9 +35,16 @@ export default function HomePageStudent() {
     fetchData();
   }, []);
 
-  const handleActionClick = (classData, action) => {
+  const handleActionClick = (event, classData, action) => {
+    event.stopPropagation(); // Prevent the click from bubbling up to the parent
     setSelectedClass(classData);
     setModalContent(action);
+  };
+
+  const openWeekly = (classData) => {
+    navigate(
+      `/class/${classData.classSemester.class.code}/${classData.sectionNumber}/weekly`
+    );
   };
 
   const handleCloseModal = () => {
@@ -50,19 +59,29 @@ export default function HomePageStudent() {
         <div className="dashboard">
           <div className="grid-container">
             {classes.map((classData) => (
-              <div className="class-box" key={classData.id}>
-                <div className="class-info" style={{ font: "bold" }}>
+              <div
+                className="class-box"
+                key={classData.id}
+                onClick={() => openWeekly(classData)} // Correctly passing the function
+              >
+                <div className="class-info">
                   {classData.classSemester.class.code} -{" "}
                   {classData.classSemester.class.name}
                 </div>
-                <button onClick={() => handleActionClick(classData, "Grades")}>
-                  Grades
-                </button>
-                <button
-                  onClick={() => handleActionClick(classData, "Attendance")}
-                >
-                  Attendance
-                </button>
+                <div className="buttons-container">
+                  <button
+                    onClick={(e) => handleActionClick(e, classData, "Grades")}
+                  >
+                    Grades
+                  </button>
+                  <button
+                    onClick={(e) =>
+                      handleActionClick(e, classData, "Attendance")
+                    }
+                  >
+                    Attendance
+                  </button>
+                </div>
               </div>
             ))}
           </div>
