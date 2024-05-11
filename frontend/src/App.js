@@ -15,6 +15,7 @@ import StaticsTable from "./pages/AnalysisPage/StaticsTable";
 import Admin from "./pages/AdminMainPage/AdminPage";
 import ClassSections from "./pages/ClassPage/Grading";
 import WeeklySchedule from "./pages/ClassPage/InstructorWeekly";
+import QuestionPage from './pages/questionDisplayPage/questionDisplay'; 
 
 import Schedule from "./pages/SchedulePage/SchedulePage";
 
@@ -72,6 +73,12 @@ function App() {
         path="/schedule"
         element={authenticated ? <Schedule /> : <Navigate to="/login" />}
       />
+
+      <Route
+        path="/questions"
+        element={authenticated ? <QuestionPage /> : <Navigate to="/login" />}
+      />
+
       <Route
         path="/assessment"
         element={authenticated ? <Assessment /> : <Navigate to="/login" />}
