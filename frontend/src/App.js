@@ -14,7 +14,7 @@ import ReportPage from "./pages/AnalysisPage/ReportPage";
 import StaticsTable from "./pages/AnalysisPage/StaticsTable";
 import Admin from "./pages/AdminMainPage/AdminPage";
 import ClassSections from "./pages/ClassPage/Grading";
-import WeeklySchedule from "./pages/ClassPage/MainPage";
+import WeeklySchedule from "./pages/ClassPage/InstructorWeekly";
 
 import Schedule from "./pages/SchedulePage/SchedulePage";
 

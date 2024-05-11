@@ -1,19 +1,78 @@
 .weekly-schedule-container {
-    margin: 20px;
-    padding: 10px;
-    background-color: #f5f5f5;
-  }
-  
-  .week-section {
-    background-color: #ffffff;
-    border: 1px solid #ccc;
-    margin-bottom: 20px;
-    padding: 15px;
-    border-left: 5px solid #4CAF50; /* Stylish green left border */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for depth */
-  }
-  
-  .week-section h2 {
-    color: #333;
-    font-size: 1.25rem; /* Adjust size as needed */
-  }
+  margin: 20px;
+  padding: 10px;
+  background-color: #f5f5f5;
+}
+
+.week-section {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  padding: 15px;
+  border-left: 5px solid #4caf50;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.week-section h2 {
+  color: #333;
+  font-size: 1.25rem;
+}
+
+.modal {
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.week-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.week-header h2 {
+  margin-right: 10px;
+}
+
+.add-content-btn {
+  padding: 0;
+  border: none;
+  width: fit-content;
+  background: none;
+  cursor: pointer;
+  color: #0645ad;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.add-content-btn:hover {
+  color: #0477bf;
+}

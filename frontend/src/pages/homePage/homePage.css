@@ -71,3 +71,63 @@
 .class-box button:hover {
   background-color: #ff5722; /* Darker shade on hover */
 }
+.modal-grades {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+
+.modal-content-grades {
+  position: relative;
+  width: 60%; /* Slightly larger */
+  max-width: 800px; /* Adjusted maximum width */
+  padding: 30px; /* More padding for better layout */
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.grade-box {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+}
+
+.grade-date {
+  flex: 0 0 auto;
+  margin-right: 15px;
+  font-size: 16px;
+  color: #666;
+}
+
+.grade-score {
+  flex-grow: 1;
+  text-align: left;
+  font-size: 16px;
+  color: #333;
+  font-weight: bold;
+}
+
+.close-grades {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  cursor: pointer;
+  font-size: 24px;
+  color: #000;
+}

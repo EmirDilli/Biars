@@ -8,10 +8,10 @@ import "./homePage.css";
 export default function HomePageStudent() {
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
   const [classes, setClasses] = useState([]);
   const [selectedClass, setSelectedClass] = useState(null);
   const [modalContent, setModalContent] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
@@ -25,30 +25,36 @@ export default function HomePageStudent() {
             },
           }
         );
-        setClasses(response.data.data);
-        console.log("Classes fetched successfully");
+        const classesWithGrades = response.data.data.map((cls) => ({
+          ...cls,
+          grades: [
+            { assignment: "Homework 1", score: "10/20", date: "01-05-2023" },
+            { assignment: "Quiz 1", score: "15/20", date: "05-08-2023" },
+            { assignment: "Midterm", score: "18/20", date: "05-15-2023" },
+          ],
+        }));
+        setClasses(classesWithGrades);
       } catch (error) {
         console.error("Failed to fetch classes:", error);
       }
     }
 
     fetchData();
-  }, []);
+  }, [userId, token]);
 
   const handleActionClick = (event, classData, action) => {
-    event.stopPropagation(); // Prevent the click from bubbling up to the parent
+    event.stopPropagation();
     setSelectedClass(classData);
     setModalContent(action);
   };
 
+  const handleCloseModal = () => {
+    setSelectedClass(null);
+  };
   const openWeekly = (classData) => {
     navigate(
       `/class/${classData.classSemester.class.code}/${classData.sectionNumber}/weekly`
     );
-  };
-
-  const handleCloseModal = () => {
-    setSelectedClass(null);
   };
 
   return (
@@ -62,7 +68,7 @@ export default function HomePageStudent() {
               <div
                 className="class-box"
                 key={classData.id}
-                onClick={() => openWeekly(classData)} // Correctly passing the function
+                onClick={() => openWeekly(classData)}
               >
                 <div className="class-info">
                   {classData.classSemester.class.code} -{" "}
@@ -90,15 +96,23 @@ export default function HomePageStudent() {
 
       {/* Modal for displaying grades or attendance */}
       {selectedClass && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={handleCloseModal}>
+        <div className="modal-grades">
+          <div className="modal-content-grades">
+            <span className="close-grades" onClick={handleCloseModal}>
               &times;
             </span>
             <h2>
               {modalContent} for {selectedClass.classSemester.class.name}
             </h2>
-            {/* Render grades or attendance information here based on modalContent */}
+            {modalContent === "Grades" &&
+              selectedClass.grades.map((grade, index) => (
+                <div className="grade-box" key={index}>
+                  <div className="grade-date">{grade.date}</div>
+                  <div className="grade-score">
+                    {grade.assignment}: {grade.score}
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
       )}
