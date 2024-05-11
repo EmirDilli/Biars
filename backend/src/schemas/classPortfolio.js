@@ -37,7 +37,7 @@ const classPortfolioSchema = new mongoose.Schema({
         },
       ],
 
-      grades: [
+      grades: [ // add NULL here when assessment created
         {
           total: Number,
           questionsGrades: [Number],

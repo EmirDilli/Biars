@@ -1,5 +1,8 @@
 const Assessment = require("../../schemas/assessment");
 const Question = require("../../schemas/question");
+const ClassPortfolio = require("../../schemas/classPortfolio");
+const ClassSemester = require("../../schemas/classSemester");
+const Semester = require("../../schemas/semester");
 const mongoose = require("mongoose");
 
 // Helper function to generate response
@@ -198,40 +201,34 @@ module.exports.getQuestionHistory = async (req, res) => {
     const questionId = req.params.questionId;
 
     if (!questionId) {
-        return res.status(400).json(generateResponse("Question ID is required", {}));
+        return res.status(400).json({ message: "Question ID is required" });
     }
 
     try {
         const history = await Assessment.aggregate([
-            { $match: { questions: questionId } }, // Find assessments with the question
-            { $group: {
-                _id: "$givenSemester", // Group by the semester
-                assessments: { $push: {
-                    name: "$name",
-                    date: "$date",
-                    deadline: "$deadline",
-                    assignedStudents: "$assignedStudents",
-                    questions: "$questions",
-                    answerKey: "$answerKey",
-                    averageGrade: "$averageGradeOfAssessment",
-                    studentGrades: "$studentGrades",
-                    standardDeviation: "$standardDeviation",
-                    graderTAs: "$graderTAs"
-                }}
+            { $unwind: "$questions" }, // Unwind the questions array to search in it
+            { $match: { "questions.question": mongoose.Types.ObjectId(questionId) } }, // Match the specific question ID
+            { $project: {
+                name: 1,
+                date: 1,
+                type: 1,
+                questions: 1, 
+                answerKey: 1
             }},
-            { $sort: { _id: 1 } } // Sort groups by semester
+            { $sort: { date: -1 } } // sort by date
         ]);
 
         if (history.length === 0) {
-            return res.status(404).json(generateResponse("No assessments found with the given question", {}));
+            return res.status(404).json({ message: "No assessments found with the given question" });
         }
 
-        res.status(200).json(generateResponse("Assessment history retrieved successfully", { history }));
+        res.status(200).json({ message: "Assessment history retrieved successfully", assessments: history });
     } catch (error) {
         console.error("Error fetching question history:", error);
-        return res.status(500).json(generateResponse("Server Error", { error: error.toString() }));
+        return res.status(500).json({ message: "Server Error", error: error.toString() });
     }
 };
+
 
 //1.5
 module.exports.createAssessment = async (req, res) => {
@@ -359,57 +356,90 @@ const isValidObjectId = (id) => {
 };
 
 module.exports.createAssessmentFromQuestions = async (req, res) => {
-    const { questions, name, date, courseId, type } = req.body;
-   
-    console.log(questions)
-    console.log(name)
-    console.log(date)
-    console.log(courseId)
-    console.log(type)
+    const { questions, name, date, courseId, type, weight } = req.body;
+    
+    console.log(questions);
+    console.log(name);
+    console.log(date);
+    console.log(courseId);
+    console.log(type);
+    console.log(weight);
+
     // Check if all required fields are provided
-    if (!questions || !name || !date || !courseId || !type) {
+    if (!questions || !name || !date || !courseId || !type || !weight) {
         return res.status(400).json({ message: "Missing required fields" });
     }
-    console.log("1")
+
     // Validate the courseId and each questionId
     if (!isValidObjectId(courseId)) {
-        console.log("Invalid courseId")
+        console.log("Invalid courseId");
         return res.status(400).json({ message: "Invalid courseId" });
     }
-    console.log("2")
-    for (let question of questions) {
 
+    for (let question of questions) {
         if (!isValidObjectId(question.questionId)) {
-            console.log("Invalid questionId in the list")
+            console.log("Invalid questionId in the list");
             return res.status(400).json({ message: "Invalid questionId in the list" });
         }
     }
-    console.log("3")
+
     try {
-        console.log("will create assessment data")
+        console.log("will create assessment data");
+
+        // Calculate default weight and max for each question
+        const defaultWeight = 100 / questions.length;
+        const defaultMax = 100;
+
         const assessmentData = {
-            
             name: name,
             date: new Date(date),
             course: new mongoose.Types.ObjectId(courseId),
             type: type,
             questions: questions.map(q => ({
                 question: new mongoose.Types.ObjectId(q.questionId),
-                weight: q.weight,
-                max: q.max
+                weight: defaultWeight,
+                max: defaultMax
             })),
             answerKey: []
-            
         };
-        console.log("will create assessment")
+        const activeSemester = await Semester.findOne({
+            status : "active"
+        });
+        console.log("active semester: ")
+        console.log(activeSemester)
+        
+        console.log("created assessment id: ");
         const assessment = new Assessment(assessmentData);
-        console.log(assessment)
-        const savedAssessment = await assessment.save();
+        await assessment.save();
         console.log(assessment._id);
-        return res.status(201).json(savedAssessment);
+
+        // Update ClassPortfolio to append a NULL value to grades for each student
+        const classSemester = await ClassSemester.findOne({ class: courseId, semester: activeSemester });
+        console.log("class semester: ")
+        console.log(classSemester)
+        if (!classSemester) {
+        return res.status(404).json({ message: "Class semester not found" });
+        }      
+        console.log("class semester id:");
+        console.log(classSemester._id);
+        console.log( await ClassPortfolio.updateOne(
+            { classSemester: classSemester._id },
+            { $push: { "studentPerformance.$[].grades": null } }
+        ))
+        console.log(
+            await ClassSemester.updateOne(
+                { class: courseId, semester: activeSemester._id },
+                { $push: { assessments: { assessment: assessment._id, weight: weight } } }
+            )
+    
+        )
+       
+
+        return res.status(201).json(assessment);
     } catch (error) {
         console.error('Failed to create assessment:', error);
         return res.status(500).json({ message: "Failed to create assessment", error: error.message });
     }
 };
+
 

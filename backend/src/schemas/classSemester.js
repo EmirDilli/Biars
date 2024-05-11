@@ -40,7 +40,7 @@ const classSemesterSchema = new mongoose.Schema({
     },
   ],
 
-  assessments: [
+  assessments: [ // add assessment here
     {
       assessment: { type: mongoose.Schema.Types.ObjectId, ref: "Assessment" },
       weight: Number,
