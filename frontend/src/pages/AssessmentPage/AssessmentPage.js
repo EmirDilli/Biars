@@ -1,34 +1,27 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./assessmentPage.css"; // Importing the CSS file for styling
-import TopBar from "../../components/Topbar/Topbar"; // Assuming TopBar is in the same directory
+import "./assessmentPage.css";
+import TopBar from "../../components/Topbar/Topbar";
 
 const AssessmentPage = () => {
   const token = localStorage.getItem("token");
   const [file, setFile] = useState(null);
+  const [uploadType, setUploadType] = useState("assessment"); // 'assessment' or 'question'
 
-  // Function to determine the image source based on the file extension
   const getFileTypeIcon = (fileName) => {
-    const extension = fileName
-      .substring(fileName.lastIndexOf(".") + 1)
-      .toLowerCase();
+    const extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
     switch (extension) {
-      case "docx":
-        return "assets/docx-icon.png"; // Replace 'icons/docx-icon.png' with your actual path
-      case "pdf":
-        return "assets/pdf-icon.png"; // Replace 'icons/pdf-icon.png' with your actual path
-      case "png":
-        return "assets/png-icon.png"; // Replace 'icons/png-icon.png' with your actual path
+      case "docx": return "assets/docx-icon.png";
+      case "pdf": return "assets/pdf-icon.png";
+      case "png": return "assets/png-icon.png";
       case "jpeg":
-      case "jpg":
-        return "assets/jpeg-icon.png"; // Replace 'icons/jpeg-icon.png' with your actual path
-      default:
-        return "assets/file-icon.png"; // Generic file icon for other file types
+      case "jpg": return "assets/jpeg-icon.png";
+      default: return "assets/file-icon.png";
     }
   };
 
   const handleDragOver = (event) => {
-    event.preventDefault(); // Prevent default behavior (Prevent file from being opened)
+    event.preventDefault();
   };
 
   const handleDrop = (event) => {
@@ -49,20 +42,21 @@ const AssessmentPage = () => {
       alert("No file selected!");
       return;
     }
+
     const formData = new FormData();
     formData.append("file", file);
 
+    const uploadURL = uploadType === "assessment" 
+      ? "http://localhost:3000/api/v1/assessment/uploadAssessment" 
+      : "http://localhost:3000/api/v1/question/uploadQuestion";
+
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/v1/assessment/uploadAssessment",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post(uploadURL, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
       console.log("File uploaded successfully:", response.data);
       alert("File uploaded successfully!");
     } catch (error) {
@@ -74,19 +68,29 @@ const AssessmentPage = () => {
   return (
     <div className="assessment-page-container">
       <TopBar />
-      <div className="upload-assessment-container">
-        <div
-          className="drag-drop-box"
-          onDragOver={handleDragOver}
-          onDrop={handleDrop}
+      <div className="upload-toggle-container">
+        <button
+          className={`toggle-button ${uploadType === "assessment" ? "active" : ""}`}
+          onClick={() => setUploadType("assessment")}
         >
+          Upload Assessment
+        </button>
+        <button
+          className={`toggle-button ${uploadType === "question" ? "active" : ""}`}
+          onClick={() => setUploadType("question")}
+        >
+          Upload Question
+        </button>
+      </div>
+      <div className="upload-assessment-container">
+        <div className="drag-drop-box" onDragOver={handleDragOver} onDrop={handleDrop}>
           {file ? (
             <>
               <img src={getFileTypeIcon(file.name)} alt="file icon" />
               <span>{file.name}</span>
             </>
           ) : (
-            "Drag and drop your file here"
+            "Drag and drop your file here or click below to select a file"
           )}
         </div>
         <button

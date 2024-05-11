@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import Workspace from "./pages/Workspace/Chat";
 import Assessment from "./pages/AssessmentPage/AssessmentPage";
-
+import QuestionPage from './pages/questionDisplayPage/questionDisplay'; 
 function App() {
   const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
@@ -54,6 +54,10 @@ function App() {
       <Route
         path="/assessment"
         element={authenticated ? <Assessment /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/questions"
+        element={authenticated ? <QuestionPage /> : <Navigate to="/login" />}
       />
     </Routes>
   );

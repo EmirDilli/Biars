@@ -5,6 +5,38 @@
   flex-direction: column;
 }
 
+.upload-toggle-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.toggle-button {
+  padding: 6px 12px;
+  font-size: 14px;
+  margin: 0 5px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-button:not(.active) {
+  background-color: #ccc;
+}
+
+.toggle-button:hover {
+  background-color: #45a049;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.toggle-button.active {
+  transform: scale(1.1);
+}
+
 .upload-assessment-container {
   padding: 20px;
   display: flex;
@@ -16,59 +48,59 @@
   width: 300px;
   height: 100px;
   border: 2px solid #4caf50;
-  border-radius: 10px; /* Rounded corners */
+  border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
-  position: relative;
   cursor: pointer;
-  text-align: center;
   color: #4caf50;
-  background-color: #f9f9f9; /* Light background to distinguish the area */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  background-color: #f9f9f9;
 }
 
 .drag-drop-box img {
-  max-height: 50px; /* Adjusted maximum height */
-  max-width: 80%; /* Ensuring the image does not overflow the width */
-  margin-right: 10px; /* Space between the image and the filename */
+  max-height: 50px;
+  margin-right: 10px;
 }
 
 .drag-drop-box span {
-  pointer-events: none; /* Prevents the file name from interfering with file input */
-  white-space: nowrap; /* Keeps the text from wrapping */
-  overflow: hidden; /* Prevent text overflow */
-  text-overflow: ellipsis; /* Adds an ellipsis if the text is too long */
+  pointer-events: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .file-select-button {
-  margin-bottom: 10px;
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #4caf50;
+  padding: 8px 16px;
+  font-size: 14px;
   color: white;
+  background-color: #3f51b5;  /* Changed to a distinct blue color */
   border: none;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .file-select-button:hover {
-  background-color: #45a049;
+  background-color: #303f9f;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.upload-form button {
+.upload-button {
   padding: 10px 20px;
-  font-size: 16px;
+  font-size: 14px;
   color: white;
-  background-color: #4caf50;
+  background-color: #009688;  /* Teal color for uploading */
   border: none;
   cursor: pointer;
+  margin-top: 10px; /* Adding some space between the select and upload buttons */
+  transition: all 0.3s ease;
 }
 
-.upload-form button:hover {
-  background-color: #45a049;
+.upload-button:hover {
+  background-color: #00796b;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.upload-form button:disabled {
+.file-select-button:disabled, .upload-button:disabled {
   background-color: #ccc;
+  cursor: not-allowed;
 }

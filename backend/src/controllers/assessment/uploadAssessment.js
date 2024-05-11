@@ -1,6 +1,12 @@
 const User = require("../../schemas/user");
+const Assessment = require("../../schemas/assessment");
 const { generateResponse } = require("../../utils/response");
-const { PutObjectCommand, S3Client } = require("@aws-sdk/client-s3");
+const { GetObjectCommand, PutObjectCommand, S3Client } = require("@aws-sdk/client-s3");
+const PDFDocument = require('pdfkit');
+const path = require('path');
+const axios = require('axios');
+const fs = require('fs');
+const { Buffer } = require('buffer');
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -40,3 +46,73 @@ module.exports.uploadAsssessment = async (req, res) => {
     return res.status(500).json(generateResponse("Server Error", { error }));
   }
 };
+
+
+module.exports.downloadAssessmentPDF = async (req, res) => {
+  const assessmentId = req.params.id;
+
+  const assessment = await Assessment.findById(assessmentId).populate({
+    path: 'questions.question',
+    model: 'Question'
+  }).exec();
+
+  if (!assessment) {
+    return res.status(404).send('Assessment not found');
+  }
+
+  const outputDir = path.join(__dirname, 'output');
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true }); // Ensure the directory exists
+  }
+
+  const pdfPath = path.join(outputDir, `Assessment-${assessmentId}.pdf`);
+  const doc = new PDFDocument();
+  const stream = fs.createWriteStream(pdfPath);
+  doc.pipe(stream);
+
+  for (let { question } of assessment.questions) {
+    if (!question.url) continue; // Skip if no URL is found
+
+    const url = new URL(question.url);
+    const bucket = url.host.split('.')[0];
+    const key = url.pathname.substring(1);
+
+    try {
+      const objectData = await s3Client.send(new GetObjectCommand({ Bucket: bucket, Key: key }));
+      let chunks = [];
+      for await (const chunk of objectData.Body) {
+        chunks.push(chunk);
+      }
+      const imageBuffer = Buffer.concat(chunks);
+
+      doc.image(imageBuffer, {
+        fit: [500, 400],
+        align: 'center',
+        valign: 'center'
+      });
+      doc.addPage();
+    } catch (error) {
+      console.error('Failed to download or process image from:', question.url, error);
+      continue; // Skip to the next question if there's an error
+    }
+  }
+
+  doc.end();
+
+  stream.on('finish', () => {
+    res.download(pdfPath, err => {
+      if (err) {
+        console.error('Download failed:', err);
+        // fs.unlinkSync(pdfPath); // Commented out to check file persistence
+        return;
+      }
+      console.log(`PDF has been downloaded: ${pdfPath}`);
+      // fs.unlinkSync(pdfPath); // Optionally keep the file for verification
+    });
+  });
+
+  stream.on('error', (error) => {
+    console.error('Error in stream writing:', error);
+  });
+};
+
