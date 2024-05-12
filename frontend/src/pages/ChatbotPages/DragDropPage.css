@@ -1,0 +1,59 @@
+.dragDropPage {
+  color:aliceblue;
+}
+
+.mainContainer {
+    display: flex;
+    justify-content: start; /* Align items to the start of the container */
+    margin: 20px;
+    
+  }
+
+  .rightContainer {
+    flex: 3; /* Takes up more space than the class list */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .dragDropArea {
+    border: 2px dashed #aaa;
+    height: 350px;
+    width: 500px;
+    color:aliceblue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    transition: background-color 0.3s;
+  }
+  
+  .dragDropArea.drag-over {
+    background-color: #e0e0e0; /* Light grey to indicate drag over */
+  }
+  .optionsContainer {
+    display: flex;
+    flex-direction: column;
+    font-size: 15pt;
+    color:aliceblue;
+    margin-left: 20px; /* Adjust as needed */
+  }
+  
+  .inputBarContainer {
+    width: 100%; /* Take the full width of the container */
+    margin-bottom: 20px; /* Space between the input bar and drag drop area */
+  }
+  
+  .userInput {
+    width: 90%; /* Adjust based on your layout */
+    padding: 8px 15px; /* Padding for aesthetic spacing */
+    font-size: 16px; /* Font size similar to other elements */
+    border: 1px solid #ccc; /* Subtle border */
+    border-radius: 5px; /* Rounded corners for modern look */
+    color: aliceblue; /* Text color */
+    background-color: #333; /* Dark background for contrast */
+  }
+
+  .dragDropArea.file-dropped {
+    background-color: #90ee90; /* Light green to indicate file has been dropped */
+}
