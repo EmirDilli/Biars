@@ -1,9 +1,16 @@
-import { Event, Book, SmartToy } from "@mui/icons-material";
+import {
+  Event,
+  Book,
+  SmartToy,
+  Analytics,
+  Assessment,
+  Upload,
+} from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const navigate = useNavigate();
-
+  const type = localStorage.getItem("type");
   const openCalendar = () => {
     navigate("/event");
   };
@@ -15,6 +22,15 @@ const Sidebar = () => {
   const openSchedule = () => {
     navigate("/schedule");
   };
+
+  const uploadQuestion = () => {
+    navigate("/schedule");
+  };
+
+  const createAssessment = () => {
+    navigate("/schedule");
+  };
+
 
   return (
     <div className="sidebar" style={{ marginTop: "75px" }}>
@@ -34,6 +50,18 @@ const Sidebar = () => {
             <Book className="sidebarIcon" />
             <span className="sidebarListItemText">Schedule</span>
           </li>
+          {type == 1 && (
+            <li className="sidebarListItem" onClick={uploadQuestion}>
+              <Analytics className="sidebarIcon" />
+              <span className="sidebarListItemText">Upload Question</span>
+            </li>
+          )}
+          {type == 1 && (
+            <li className="sidebarListItem" onClick={createAssessment}>
+              <Assessment className="sidebarIcon" />
+              <span className="sidebarListItemText">Create Assessment</span>
+            </li>
+          )}
         </ul>
         <hr className="sidebarHr" />
       </div>

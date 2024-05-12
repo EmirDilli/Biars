@@ -74,7 +74,8 @@ export default function HomePageStudent() {
       setModalContent(action);
     }
     else {
-      navigate(`/class/${classData.classSemester.class.code}/grading`)
+      if(action === 'Grades')
+        navigate(`/class/${classData.classSemester.class.code}/grading`)
     }
   };
 
@@ -122,7 +123,7 @@ export default function HomePageStudent() {
                       handleActionClick(e, classData, "Attendance")
                     }
                   >
-                    Attendance
+                    {localStorage.getItem('type') === 3 ? 'Attendance' : 'Analysis'}
                   </button>
                 </div>
               </div>
