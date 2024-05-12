@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-
+import { useParams, useNavigate } from "react-router-dom";
 import "./weekly.css";
 import { Assignment, Add } from "@mui/icons-material";
 import Topbar from "../../components/Topbar/Topbar";
 
 const ContentItem = ({ item }) => {
+  const navigate = useNavigate();
+
+  const handleAssignmentClick = () => {
+    const path = `/class/${item.value.split('/')[item.value.split('/').length - 3]}/${item.value.split('/')[item.value.split('/').length - 1]}/submissions`;
+    navigate(path);
+  };
+
   const getIcon = (type) => {
     switch (type) {
       case "assignment":
@@ -32,7 +38,8 @@ const ContentItem = ({ item }) => {
     }
   };
 
-  if (item.type === "link") {
+  console.log(item.linkType);
+  if (item.type === "link" && item.linkType !== "assignment") {
     return (
       <div
         style={{ marginBottom: "10px", display: "flex", alignItems: "center" }}
@@ -54,8 +61,31 @@ const ContentItem = ({ item }) => {
     );
   }
 
+  if (item.type === "link" && item.linkType === "assignment") {
+    return (
+      <div
+        style={{ marginBottom: "10px", display: "flex", alignItems: "center" }}
+      >
+        {getIcon(item.linkType)}
+        <li
+          onClick={handleAssignmentClick}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            color: "#0645AD",
+            textDecoration: "none",
+            marginLeft: "8px",
+          }}
+        >
+          {item.description}
+        </li>
+      </div>
+    );
+  }
+
   return <p style={{ margin: "10px 0" }}>{item.value}</p>;
 };
+
 
 const WeekSection = ({ week, onAddContent }) => {
   const format = (date) => {

@@ -120,7 +120,7 @@ function App() {
         element={<InstructorWeekly />}
       />
       <Route
-        path="class/:className/:sectionNumber/:assignment/submissions"
+        path="class/:className/:assignment/submissions"
         element={<Submissions />}
       />
       <Route path="assessment" element={<AssessmentPage />} />

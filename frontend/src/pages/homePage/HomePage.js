@@ -37,38 +37,45 @@ export default function HomePageStudent() {
   }, [userId, token]);
 
   const handleActionClick = (event, classData, action) => {
+    const type = localStorage.getItem('type');
+
     event.stopPropagation();
     setSelectedClass(classData);
 
-    axios
-      .get(
-        `http://localhost:3000/api/v1/class/${classData.classSemester.class.code}/getGrades`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        const gradesArr = [];
-        for (let i = 0; i < response.data.grades.length; i++) {
-          if (response.data.grades[i].questionsGrades.length !== 0) {
-            gradesArr.push({
-              assignment: response.data.assessments.assessments[i].assessment,
-              score: response.data.grades[i].total,
-            });
+    if(type === 3) {
+      axios
+        .get(
+          `http://localhost:3000/api/v1/class/${classData.classSemester.class.code}/getGrades`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           }
-        }
-        setGradesFinal(gradesArr);
-        console.log(gradesArr);
-        console.log(gradesFinal);
-      })
-      .catch((error) => {
-        console.error("Error fetching grades:", error);
-        // Handle error if necessary
-      });
-    setModalContent(action);
+        )
+        .then((response) => {
+          const gradesArr = [];
+          for (let i = 0; i < response.data.grades.length; i++) {
+            if (response.data.grades[i].questionsGrades.length !== 0) {
+              gradesArr.push({
+                assignment: response.data.assessments.assessments[i].assessment,
+                score: response.data.grades[i].total,
+              });
+            }
+          }
+          setGradesFinal(gradesArr);
+          console.log(gradesArr);
+          console.log(gradesFinal);
+        })
+        .catch((error) => {
+          console.error("Error fetching grades:", error);
+          // Handle error if necessary
+        });
+      setModalContent(action);
+    }
+    else {
+      navigate(`/class/${classData.classSemester.class.code}/grading`)
+    }
   };
 
   const handleCloseModal = () => {
