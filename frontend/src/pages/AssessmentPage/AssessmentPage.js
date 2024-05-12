@@ -9,14 +9,21 @@ const AssessmentPage = () => {
   const [uploadType, setUploadType] = useState("assessment"); // 'assessment' or 'question'
 
   const getFileTypeIcon = (fileName) => {
-    const extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+    const extension = fileName
+      .substring(fileName.lastIndexOf(".") + 1)
+      .toLowerCase();
     switch (extension) {
-      case "docx": return "assets/docx-icon.png";
-      case "pdf": return "assets/pdf-icon.png";
-      case "png": return "assets/png-icon.png";
+      case "docx":
+        return "assets/docx-icon.png";
+      case "pdf":
+        return "assets/pdf-icon.png";
+      case "png":
+        return "assets/png-icon.png";
       case "jpeg":
-      case "jpg": return "assets/jpeg-icon.png";
-      default: return "assets/file-icon.png";
+      case "jpg":
+        return "assets/jpeg-icon.png";
+      default:
+        return "assets/file-icon.png";
     }
   };
 
@@ -46,9 +53,10 @@ const AssessmentPage = () => {
     const formData = new FormData();
     formData.append("file", file);
 
-    const uploadURL = uploadType === "assessment" 
-      ? "http://localhost:3000/api/v1/assessment/uploadAssessment" 
-      : "http://localhost:3000/api/v1/question/uploadQuestion";
+    const uploadURL =
+      uploadType === "assessment"
+        ? "http://localhost:3000/api/v1/assessment/uploadAssessment"
+        : "http://localhost:3000/api/v1/question/uploadQuestion";
 
     try {
       const response = await axios.post(uploadURL, formData, {
@@ -70,20 +78,28 @@ const AssessmentPage = () => {
       <TopBar />
       <div className="upload-toggle-container">
         <button
-          className={`toggle-button ${uploadType === "assessment" ? "active" : ""}`}
+          className={`toggle-button ${
+            uploadType === "assessment" ? "active" : ""
+          }`}
           onClick={() => setUploadType("assessment")}
         >
           Upload Assessment
         </button>
         <button
-          className={`toggle-button ${uploadType === "question" ? "active" : ""}`}
+          className={`toggle-button ${
+            uploadType === "question" ? "active" : ""
+          }`}
           onClick={() => setUploadType("question")}
         >
           Upload Question
         </button>
       </div>
       <div className="upload-assessment-container">
-        <div className="drag-drop-box" onDragOver={handleDragOver} onDrop={handleDrop}>
+        <div
+          className="drag-drop-box"
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+        >
           {file ? (
             <>
               <img src={getFileTypeIcon(file.name)} alt="file icon" />

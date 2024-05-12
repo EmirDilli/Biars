@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-
+import Topbar from "../../components/Topbar/Topbar";
 import "./weekly.css";
 import { Assignment } from "@mui/icons-material";
 
@@ -32,31 +32,61 @@ const ContentItem = ({ item }) => {
   };
 
   if (item.type === "link") {
-    return (
-      <div
-        style={{ marginBottom: "10px", display: "flex", alignItems: "center" }}
-      >
-        {getIcon(item.linkType)}
-        <a
-          href={item.value}
-          target="_blank"
-          rel="noopener noreferrer"
+    if (item.linkType === "assignment") {
+      console.log(item.description);
+      return (
+        <div
           style={{
-            color: "#0645AD",
-            textDecoration: "none",
-            marginLeft: "8px",
+            marginBottom: "10px",
+            display: "flex",
+            alignItems: "center",
           }}
         >
-          {item.description}
-        </a>
-      </div>
-    );
+          {getIcon(item.linkType)}
+          <a
+            href={`${item.description}/uploadAssignment`}
+            rel="noopener noreferrer"
+            style={{
+              color: "#0645AD",
+              textDecoration: "none",
+              marginLeft: "8px",
+            }}
+          >
+            {item.description}
+          </a>
+        </div>
+      );
+    } else {
+      return (
+        <div
+          style={{
+            marginBottom: "10px",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          {getIcon(item.linkType)}
+          <a
+            href={item.value}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: "#0645AD",
+              textDecoration: "none",
+              marginLeft: "8px",
+            }}
+          >
+            {item.description}
+          </a>
+        </div>
+      );
+    }
   }
 
   return <p style={{ margin: "10px 0" }}>{item.value}</p>;
 };
 
-const WeekSection = ({ week }) => {
+const WeekSection = ({ week, className, sectionNumber }) => {
   const format = (date) => {
     const dateObj = new Date(date);
     return dateObj.toLocaleDateString("en-UK", {
@@ -71,7 +101,12 @@ const WeekSection = ({ week }) => {
         {format(week.startDate)} - {format(week.endDate)}
       </h2>
       {week.content.map((item, index) => (
-        <ContentItem key={index} item={item} />
+        <ContentItem
+          key={index}
+          item={item}
+          className={className}
+          sectionNumber={sectionNumber}
+        />
       ))}
     </div>
   );
@@ -111,9 +146,17 @@ const WeeklySchedule = () => {
 
   return (
     <div>
-      {weeksWithContent.map((week, index) => (
-        <WeekSection key={index} week={week} />
-      ))}
+      <Topbar />
+      <div style={{ marginTop: "75px" }}>
+        {weeksWithContent.map((week, index) => (
+          <WeekSection
+            key={index}
+            week={week}
+            className={className}
+            sectionNumber={sectionNumber}
+          />
+        ))}
+      </div>
     </div>
   );
 };

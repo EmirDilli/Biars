@@ -9,7 +9,10 @@ const { report } = require("../controllers/class/report");
 const { getSemester } = require("../controllers/class/getSemesters");
 const { activeSemesters } = require("../controllers/class/activeSemesters");
 const { weekly } = require("../controllers/weekly/weekly");
-
+const { addWeekly } = require("../controllers/weekly/addWeekly");
+const multer = require("multer");
+const { getGrades } = require("../controllers/class/getGrades");
+const upload = multer();
 
 const router = Router();
 router.get("/:className/averages", isAuth, calculateAverages);
@@ -20,4 +23,11 @@ router.get("/:className/report", isAuth, report);
 router.get("/:className/semesters", isAuth, getSemester);
 router.get("/:className/activeSemesters", isAuth, activeSemesters);
 router.get("/:className/:sectionNumber/weekly", isAuth, weekly);
+router.post(
+  "/:className/:sectionNumber/addWeekly",
+  isAuth,
+  upload.array("files", 10),
+  addWeekly
+);
+router.get("/:className/getGrades", isAuth, getGrades);
 module.exports = router;

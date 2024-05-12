@@ -4,7 +4,7 @@ import HomePage from "./pages/homePage/HomePage";
 import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import Workspace from "./pages/Workspace/Chat";
-import Assessment from "./pages/AssessmentPage/AssessmentPage";
+import Assessment from "./pages/AssessmentPage/UploadAssessment";
 import Event from "./pages/EventPage/EventPage";
 import AbsenteeisChart from "./pages/AnalysisPage/AbsenteeimChart";
 import AveragesChart from "./pages/AnalysisPage/AvaragesChart";
@@ -14,8 +14,12 @@ import ReportPage from "./pages/AnalysisPage/ReportPage";
 import StaticsTable from "./pages/AnalysisPage/StaticsTable";
 import Admin from "./pages/AdminMainPage/AdminPage";
 import ClassSections from "./pages/ClassPage/Grading";
-import WeeklySchedule from "./pages/ClassPage/InstructorWeekly";
-import QuestionPage from './pages/questionDisplayPage/questionDisplay'; 
+import WeeklySchedule from "./pages/ClassPage/MainPage";
+import QuestionPage from "./pages/questionDisplayPage/questionDisplay";
+
+import Submissions from "./pages/ClassPage/Submissions";
+import AssessmentPage from "./pages/AssessmentPage/AssessmentPage";
+import QuestinDisplayPage from "./pages/questionDisplayPage/questionDisplay";
 
 import Schedule from "./pages/SchedulePage/SchedulePage";
 
@@ -80,7 +84,7 @@ function App() {
       />
 
       <Route
-        path="/assessment"
+        path="class/:className/:sectionNumber/:assignment/uploadAssignment"
         element={authenticated ? <Assessment /> : <Navigate to="/login" />}
       />
       <Route
@@ -110,6 +114,12 @@ function App() {
         path="class/:className/:sectionNumber/weekly"
         element={<WeeklySchedule />}
       />
+      <Route
+        path="class/:className/:sectionNumber/:assignment/submissions"
+        element={<Submissions />}
+      />
+      <Route path="assessment" element={<AssessmentPage />} />
+      <Route path="question" element={<QuestinDisplayPage />} />
     </Routes>
   );
 }

@@ -1,12 +1,19 @@
 const User = require("../../schemas/user");
 const Assessment = require("../../schemas/assessment");
+
+const { Semester } = require("../../schemas/index");
+
 const { generateResponse } = require("../../utils/response");
-const { GetObjectCommand, PutObjectCommand, S3Client } = require("@aws-sdk/client-s3");
-const PDFDocument = require('pdfkit');
-const path = require('path');
-const axios = require('axios');
-const fs = require('fs');
-const { Buffer } = require('buffer');
+const {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} = require("@aws-sdk/client-s3");
+const PDFDocument = require("pdfkit");
+const path = require("path");
+const axios = require("axios");
+const fs = require("fs");
+const { Buffer } = require("buffer");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -29,14 +36,38 @@ module.exports.uploadAsssessment = async (req, res) => {
   try {
     const file = req.file;
 
+    const activeSemester = await Semester.findOne({ status: "active" });
+    const { classCode, sectionNumber, assignment } = req.params;
+    console.log(file);
+    let params = {
+      Bucket: "cs319",
+      Body: file.buffer,
+      Key: `${
+        activeSemester.semesterId
+      }/${classCode}/Assignments/${assignment}/Submissions/${
+        req.user.id +
+        "-" +
+        req.user.name +
+        "-" +
+        classCode +
+        "-" +
+        sectionNumber +
+        "-" +
+        assignment +
+        "." +
+        file.originalname.split(".")[file.originalname.split(".").length - 1]
+      }`,
+      ACL: "public-read",
+    };
+
     console.log(file.originalname);
-    const params = {
+    params = {
       Bucket: "cs319",
       Body: file.buffer, // The path to the directory you want to upload the object to, starting with your Space name.
       Key: `assessments/${file.originalname}`, // Object key, referenced whenever you want to access this file later.
       ACL: "public-read", // Defines ACL permissions, such as private or public.
     };
-    const data = await s3Client.send(new PutObjectCommand(params));
+    let data = await s3Client.send(new PutObjectCommand(params));
     console.log(data);
     console.log(
       "Successfully uploaded object: " + params.Bucket + "/" + params.Key
@@ -47,20 +78,21 @@ module.exports.uploadAsssessment = async (req, res) => {
   }
 };
 
-
 module.exports.downloadAssessmentPDF = async (req, res) => {
   const assessmentId = req.params.id;
 
-  const assessment = await Assessment.findById(assessmentId).populate({
-    path: 'questions.question',
-    model: 'Question'
-  }).exec();
+  const assessment = await Assessment.findById(assessmentId)
+    .populate({
+      path: "questions.question",
+      model: "Question",
+    })
+    .exec();
 
   if (!assessment) {
-    return res.status(404).send('Assessment not found');
+    return res.status(404).send("Assessment not found");
   }
 
-  const outputDir = path.join(__dirname, 'output');
+  const outputDir = path.join(__dirname, "output");
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true }); // Ensure the directory exists
   }
@@ -74,11 +106,13 @@ module.exports.downloadAssessmentPDF = async (req, res) => {
     if (!question.url) continue; // Skip if no URL is found
 
     const url = new URL(question.url);
-    const bucket = url.host.split('.')[0];
+    const bucket = url.host.split(".")[0];
     const key = url.pathname.substring(1);
 
     try {
-      const objectData = await s3Client.send(new GetObjectCommand({ Bucket: bucket, Key: key }));
+      const objectData = await s3Client.send(
+        new GetObjectCommand({ Bucket: bucket, Key: key })
+      );
       let chunks = [];
       for await (const chunk of objectData.Body) {
         chunks.push(chunk);
@@ -87,22 +121,26 @@ module.exports.downloadAssessmentPDF = async (req, res) => {
 
       doc.image(imageBuffer, {
         fit: [500, 400],
-        align: 'center',
-        valign: 'center'
+        align: "center",
+        valign: "center",
       });
       doc.addPage();
     } catch (error) {
-      console.error('Failed to download or process image from:', question.url, error);
+      console.error(
+        "Failed to download or process image from:",
+        question.url,
+        error
+      );
       continue; // Skip to the next question if there's an error
     }
   }
 
   doc.end();
 
-  stream.on('finish', () => {
-    res.download(pdfPath, err => {
+  stream.on("finish", () => {
+    res.download(pdfPath, (err) => {
       if (err) {
-        console.error('Download failed:', err);
+        console.error("Download failed:", err);
         // fs.unlinkSync(pdfPath); // Commented out to check file persistence
         return;
       }
@@ -111,8 +149,7 @@ module.exports.downloadAssessmentPDF = async (req, res) => {
     });
   });
 
-  stream.on('error', (error) => {
-    console.error('Error in stream writing:', error);
+  stream.on("error", (error) => {
+    console.error("Error in stream writing:", error);
   });
 };
-

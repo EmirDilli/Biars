@@ -6,6 +6,8 @@ const {
   Class,
   User,
   Instructor,
+  ClassPortfolio,
+
   TA,
 } = require("../../schemas/index");
 const { generateResponse } = require("../../utils/response");
@@ -63,8 +65,14 @@ async function parseCSVData(buffer, activeSemester) {
         name: `${classObj.name} (${activeSemester.semesterId})`,
       });
 
-      await classSemesters[classCode].save();
+      const classSemester = await classSemesters[classCode].save();
+      const classPortfolio = new ClassPortfolio({
+        classSemester: classSemester._id,
+      });
+      classSemester.portfolio = classPortfolio._id;
       activeSemester.classSemesters.push(classSemesters[classCode]._id);
+      await classSemester.save();
+      await classPortfolio.save();
     }
 
     const instructor = row["Instructors"];

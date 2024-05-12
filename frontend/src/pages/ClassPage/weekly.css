@@ -17,50 +17,6 @@
   color: #333;
   font-size: 1.25rem;
 }
-
-.modal {
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-}
-
-.close {
-  color: #aaaaaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.week-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.week-header h2 {
-  margin-right: 10px;
-}
-
 .add-content-btn {
   padding: 0;
   border: none;
@@ -72,7 +28,60 @@
   display: flex;
   align-items: center;
 }
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); /* Semi-transparent background for overlay */
+  z-index: 1050;
+}
 
-.add-content-btn:hover {
-  color: #0477bf;
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  width: auto;
+  max-width: 600px; /* Limits the width of the modal content */
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+  font-size: 24px;
+  color: #000;
+}
+
+.modal-label {
+  display: block;
+  margin-bottom: 15px; /* More space between form elements */
+  color: #333;
+  font-size: 16px;
+}
+
+.modal-select,
+.modal-input,
+.modal-textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #f8f8f8;
+}
+
+.modal-input {
+  border-color: transparent; /* Transparent borders for file names, per request */
 }

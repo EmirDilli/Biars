@@ -7,6 +7,7 @@ const {
   ClassSemester,
   Class,
   Section,
+  ClassPortfolio,
 } = require("../../schemas/index");
 const { generateResponse } = require("../../utils/response");
 
@@ -69,13 +70,22 @@ module.exports.enrollStudent = async (req, res) => {
         const sections = await Section.find({
           _id: { $in: classSemester.sections },
         });
+        const portfolio = await ClassPortfolio.findById(
+          classSemester.portfolio
+        );
 
         for (const section of sections) {
           if (section.sectionNumber == record.sections[index]) {
             section.students.push(studentDb._id);
             await section.save();
+
             studentDb.classes.push(section._id);
-            await studentDb.save();
+            const savedUser = await studentDb.save();
+            portfolio.studentPerformance.push({
+              student: savedUser._id,
+              absents: 0,
+            });
+            await portfolio.save();
           }
         }
       }

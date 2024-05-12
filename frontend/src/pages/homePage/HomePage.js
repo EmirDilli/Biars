@@ -12,6 +12,7 @@ export default function HomePageStudent() {
   const [classes, setClasses] = useState([]);
   const [selectedClass, setSelectedClass] = useState(null);
   const [modalContent, setModalContent] = useState("");
+  const [gradesFinal, setGradesFinal] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -25,15 +26,8 @@ export default function HomePageStudent() {
             },
           }
         );
-        const classesWithGrades = response.data.data.map((cls) => ({
-          ...cls,
-          grades: [
-            { assignment: "Homework 1", score: "10/20", date: "01-05-2023" },
-            { assignment: "Quiz 1", score: "15/20", date: "05-08-2023" },
-            { assignment: "Midterm", score: "18/20", date: "05-15-2023" },
-          ],
-        }));
-        setClasses(classesWithGrades);
+        console.log(response.data);
+        setClasses(response.data.data);
       } catch (error) {
         console.error("Failed to fetch classes:", error);
       }
@@ -45,6 +39,35 @@ export default function HomePageStudent() {
   const handleActionClick = (event, classData, action) => {
     event.stopPropagation();
     setSelectedClass(classData);
+
+    axios
+      .get(
+        `http://localhost:3000/api/v1/class/${classData.classSemester.class.code}/getGrades`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        const gradesArr = [];
+        for (let i = 0; i < response.data.grades.length; i++) {
+          if (response.data.grades[i].questionsGrades.length !== 0) {
+            gradesArr.push({
+              assignment: response.data.assessments.assessments[i].assessment,
+              score: response.data.grades[i].total,
+            });
+          }
+        }
+        setGradesFinal(gradesArr);
+        console.log(gradesArr);
+        console.log(gradesFinal);
+      })
+      .catch((error) => {
+        console.error("Error fetching grades:", error);
+        // Handle error if necessary
+      });
     setModalContent(action);
   };
 
@@ -94,22 +117,20 @@ export default function HomePageStudent() {
         </div>
       </div>
 
-      {/* Modal for displaying grades or attendance */}
       {selectedClass && (
         <div className="modal-grades">
           <div className="modal-content-grades">
-            <span className="close-grades" onClick={handleCloseModal}>
-              &times;
-            </span>
             <h2>
               {modalContent} for {selectedClass.classSemester.class.name}
             </h2>
             {modalContent === "Grades" &&
-              selectedClass.grades.map((grade, index) => (
+              gradesFinal &&
+              gradesFinal.length > 0 &&
+              gradesFinal.map((grade, index) => (
                 <div className="grade-box" key={index}>
-                  <div className="grade-date">{grade.date}</div>
+                  <div className="grade-date">{grade.assignment.date}</div>
                   <div className="grade-score">
-                    {grade.assignment}: {grade.score}
+                    {grade.assignment.name}: {grade.score}
                   </div>
                 </div>
               ))}
