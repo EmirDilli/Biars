@@ -16,7 +16,7 @@ const Sidebar = () => {
   };
 
   const openChatbot = () => {
-    navigate("/chatbot");
+    navigate("/chatbotMain");
   };
 
   const openSchedule = () => {
