@@ -5,6 +5,8 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
+import Topbar from "../../components/Topbar/Topbar";
+
 const CalendarComponent = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const dayGridContainerRef = useRef(null);
@@ -69,41 +71,44 @@ const CalendarComponent = () => {
   };
 
   return (
-    <div
-      className="calendar-container"
-      style={{ width: "90%", marginLeft: "20px", marginTop: "75px" }}
-    >
-      <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        initialView="dayGridMonth"
-        events={events}
-        height="auto"
-        headerToolbar={{
-          left: "prev,next",
-          center: "title,today",
-          right: "dayGridMonth,timeGridWeek",
-        }}
-        eventClick={handleEventClick}
-        slotLabelFormat={{
-          hour: "numeric",
-          minute: "2-digit",
-          omitZeroMinute: false,
-          hour12: false,
-          meridiem: "short",
-        }}
-      />
-      <div style={{ width: "20%" }}>
-        {selectedEvent && (
-          <div className="event-details">
-            <h3>{selectedEvent.title}</h3>
-            <p>Desc: {selectedEvent.desc}</p>
-            <p>Date: {formatDate(selectedEvent.start)}</p>
-            <p>Start Time: {formatTime(selectedEvent.start)}</p>
-            {selectedEvent.end !== selectedEvent.start && (
-              <p>End Time: {formatTime(selectedEvent.end)}</p>
-            )}
-          </div>
-        )}
+    <div>
+      <Topbar />
+      <div
+        className="calendar-container"
+        style={{ width: "90%", marginLeft: "20px", marginTop: "75px" }}
+      >
+        <FullCalendar
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          initialView="dayGridMonth"
+          events={events}
+          height="auto"
+          headerToolbar={{
+            left: "prev,next",
+            center: "title,today",
+            right: "dayGridMonth,timeGridWeek",
+          }}
+          eventClick={handleEventClick}
+          slotLabelFormat={{
+            hour: "numeric",
+            minute: "2-digit",
+            omitZeroMinute: false,
+            hour12: false,
+            meridiem: "short",
+          }}
+        />
+        <div style={{ width: "20%" }}>
+          {selectedEvent && (
+            <div className="event-details">
+              <h3>{selectedEvent.title}</h3>
+              <p>Desc: {selectedEvent.desc}</p>
+              <p>Date: {formatDate(selectedEvent.start)}</p>
+              <p>Start Time: {formatTime(selectedEvent.start)}</p>
+              {selectedEvent.end !== selectedEvent.start && (
+                <p>End Time: {formatTime(selectedEvent.end)}</p>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

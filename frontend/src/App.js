@@ -123,8 +123,11 @@ function App() {
         path="class/:className/:assignment/submissions"
         element={<Submissions />}
       />
-      <Route path="assessment" element={<AssessmentPage />} />
-      <Route path="question" element={<QuestinDisplayPage />} />
+      <Route path="/class/:className/assessment" element={<AssessmentPage />} />
+      <Route
+        path="/class/:className/question"
+        element={<QuestinDisplayPage />}
+      />
       <Route path="class/:className/grading" element={<GradingPage />} />
     </Routes>
   );

@@ -37,12 +37,12 @@ export default function HomePageStudent() {
   }, [userId, token]);
 
   const handleActionClick = (event, classData, action) => {
-    const type = localStorage.getItem('type');
+    const type = localStorage.getItem("type");
 
     event.stopPropagation();
     setSelectedClass(classData);
 
-    if(type === 3) {
+    if (type === 3) {
       axios
         .get(
           `http://localhost:3000/api/v1/class/${classData.classSemester.class.code}/getGrades`,
@@ -72,10 +72,9 @@ export default function HomePageStudent() {
           // Handle error if necessary
         });
       setModalContent(action);
-    }
-    else {
-      if(action === 'Grades')
-        navigate(`/class/${classData.classSemester.class.code}/grading`)
+    } else {
+      if (action === "Grades")
+        navigate(`/class/${classData.classSemester.class.code}/grading`);
     }
   };
 
@@ -94,7 +93,14 @@ export default function HomePageStudent() {
       );
     }
   };
-
+  function uploadQuestion(e, classData) {
+    e.stopPropagation();
+    navigate(`/class/${classData.classSemester.class.code}/assessment`);
+  }
+  function createAssessment(e, classData) {
+    e.stopPropagation();
+    navigate(`/class/${classData.classSemester.class.code}/question`);
+  }
   return (
     <>
       <Topbar />
@@ -109,22 +115,46 @@ export default function HomePageStudent() {
                 onClick={() => openWeekly(classData)}
               >
                 <div className="class-info">
-                  {classData.classSemester.class.code} -{" "}
+                  {classData.classSemester.class.code}-{classData.sectionNumber}{" "}
                   {classData.classSemester.class.name}
                 </div>
                 <div className="buttons-container">
-                  <button
-                    onClick={(e) => handleActionClick(e, classData, "Grades")}
-                  >
-                    Grades
-                  </button>
-                  <button
-                    onClick={(e) =>
-                      handleActionClick(e, classData, "Attendance")
-                    }
-                  >
-                    {localStorage.getItem('type') === 3 ? 'Attendance' : 'Analysis'}
-                  </button>
+                  <div className="buttons-container">
+                    <div className="button-row">
+                      <button
+                        onClick={(e) =>
+                          handleActionClick(e, classData, "Grades")
+                        }
+                      >
+                        Grades
+                      </button>
+                      <button
+                        onClick={(e) =>
+                          handleActionClick(
+                            e,
+                            classData,
+                            localStorage.getItem("type") === "3"
+                              ? "Attendance"
+                              : "Analysis"
+                          )
+                        }
+                      >
+                        {localStorage.getItem("type") === "3"
+                          ? "Attendance"
+                          : "Analysis"}
+                      </button>
+                    </div>
+                    {localStorage.getItem("type") == 1 && (
+                      <div className="button-row">
+                        <button onClick={(e) => uploadQuestion(e, classData)}>
+                          Upload Question
+                        </button>
+                        <button onClick={(e) => createAssessment(e, classData)}>
+                          Create Assessment
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}

@@ -24,13 +24,12 @@ const Sidebar = () => {
   };
 
   const uploadQuestion = () => {
-    navigate("/schedule");
+    navigate(`/class/uploadAssignment`);
   };
 
   const createAssessment = () => {
     navigate("/schedule");
   };
-
 
   return (
     <div className="sidebar" style={{ marginTop: "75px" }}>
@@ -50,18 +49,6 @@ const Sidebar = () => {
             <Book className="sidebarIcon" />
             <span className="sidebarListItemText">Schedule</span>
           </li>
-          {type == 1 && (
-            <li className="sidebarListItem" onClick={uploadQuestion}>
-              <Analytics className="sidebarIcon" />
-              <span className="sidebarListItemText">Upload Question</span>
-            </li>
-          )}
-          {type == 1 && (
-            <li className="sidebarListItem" onClick={createAssessment}>
-              <Assessment className="sidebarIcon" />
-              <span className="sidebarListItemText">Create Assessment</span>
-            </li>
-          )}
         </ul>
         <hr className="sidebarHr" />
       </div>
