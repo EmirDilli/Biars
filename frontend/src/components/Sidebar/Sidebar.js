@@ -1,11 +1,4 @@
-import {
-  Event,
-  Book,
-  SmartToy,
-  Analytics,
-  Assessment,
-  Upload,
-} from "@mui/icons-material";
+import { Event, Book, SmartToy, Analytics } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
