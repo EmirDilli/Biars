@@ -8,6 +8,8 @@ const {
   Instructor,
   TA,
 } = require("../../schemas/index");
+let Chatbot = require("../chatbot/chatbotClass");
+let ChatbotChats = require("../chatbot/chatbotChatClass");
 const { generateResponse } = require("../../utils/response");
 const { Readable } = require("stream");
 const { PutObjectCommand, S3Client } = require("@aws-sdk/client-s3");
@@ -67,12 +69,43 @@ async function parseCSVData(buffer, activeSemester) {
       activeSemester.classSemesters.push(classSemesters[classCode]._id);
     }
 
+    let cb = await Chatbot.getChatbotId(classCode, 0);
+    if(!cb){
+      let cb1 = new Chatbot(classCode, 0);
+      let cb2 = new Chatbot(classCode, 1);
+      await Chatbot.createNewChatbot(cb1);
+      await Chatbot.createNewChatbot(cb2);
+      cb = await Chatbot.getChatbotId(classCode, 0);
+    }
+    let cb2 = await Chatbot.getChatbotId(classCode, 1);
+    
     const instructor = row["Instructors"];
     const tas = row["TAs"] ? row["TAs"].split(";").map((ta) => ta.trim()) : [];
+
+    let userIds = await Promise.all(tas.map(async (ta) => {
+      return await User.findOne({ name: ta }).select("_id");
+
+    }));
+
+    userIds.forEach(async (uId) => {
+      let chat = await ChatbotChats.getRelatedChat(cb, uId);
+      if(!chat){
+        await ChatbotChats.createNewChatbotChat(cb, uId);
+        await ChatbotChats.createNewChatbotChat(cb2, uId);
+      }
+    })
 
     const userId = await User.findOne({ name: instructor }).select("_id");
 
     const instructorDb = await Instructor.findOne({ userId: userId });
+
+    if(instructorDb){
+      let chat = await ChatbotChats.getRelatedChat(cb, userId);
+      if(!chat){
+        await ChatbotChats.createNewChatbotChat(cb, userId);
+        await ChatbotChats.createNewChatbotChat(cb2, userId);
+      }
+    }
 
     if (!classSemesters[classCode].instructors.includes(instructorDb._id)) {
       classSemesters[classCode].instructors.push(instructorDb._id);
