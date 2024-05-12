@@ -1,0 +1,41 @@
+/* src/Card.css */
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    padding: 10px;
+  }
+  
+  .card-header {
+    font-size: 1em;
+    color: #333;
+    margin-bottom: 10px; /* Space between header and content */
+  }
+  
+  .card p {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .usage-count {
+    display: flex;
+    align-items: center;
+    background-color: #e0f7fa;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 1.2em;
+    margin-top: 10px; /* Space between content and usage count */
+  }
+  
+  .usage-count strong {
+    margin-left: 5px;
+    font-size: 1.4em;
+    color: #007bff;
+  }
+  
+  
+  

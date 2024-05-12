@@ -1,0 +1,36 @@
+.removeSourcePage {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  
+  .dropdownContainer {
+    position: relative;
+    flex-grow: 1;
+    min-height: 200px; /* Make sure this is enough to show the dropdown when expanded */
+}
+
+.dropdownMenu {
+    position: absolute;
+    bottom: 0px; /* Adjust this value based on the button's height and desired overlap */
+    left: 0;
+    right: 0;
+    z-index: 1000; /* Ensure it's higher than the button */
+}
+
+
+.deleteButton {
+    background-color: #f44336; /* Red */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    bottom: 0; /* Align with bottom of the container */
+    right: 0; /* Ensure it doesn't overlap with dropdown */
+    z-index: 100; /* Lower than dropdown but above other content */
+}
+
+  
+  
+  
