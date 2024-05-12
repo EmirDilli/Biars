@@ -9,6 +9,24 @@ const {
   Section,
 } = require("../../schemas/index");
 const { generateResponse } = require("../../utils/response");
+let Chatbot = require("../chatbot/chatbotClass");
+let ChatbotChats = require("../chatbot/chatbotChatClass");
+
+async function createChatbotChats(userId, usersCourseList){
+ 
+
+  let promises = usersCourseList.map(async (code) => {
+    let chatbotId = await Chatbot.getChatbotId(code, 0);
+    let chatbotId2 = await Chatbot.getChatbotId(code, 1);
+    await ChatbotChats.createNewChatbotChat(chatbotId, userId);
+    return await ChatbotChats.createNewChatbotChat(chatbotId2, userId);
+  });
+
+  promises.then(() => {
+    return true;
+  });
+
+}
 
 module.exports.enrollStudent = async (req, res) => {
   try {
@@ -51,6 +69,10 @@ module.exports.enrollStudent = async (req, res) => {
       const studentDb = await Student.findOne({ userId: userDb._id });
 
       const classIds = await Class.find({ code: { $in: record.classes } });
+
+      createChatbotChats(userDb._id, record.classes);
+      
+      
 
       const classSemesters = [];
       for (const classId of classIds) {
