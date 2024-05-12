@@ -61,12 +61,12 @@ module.exports.uploadAsssessment = async (req, res) => {
     };
 
     console.log(file.originalname);
-    params = {
+    /*  params = {
       Bucket: "cs319",
       Body: file.buffer, // The path to the directory you want to upload the object to, starting with your Space name.
-      Key: `assessments/${file.originalname}`, // Object key, referenced whenever you want to access this file later.
+      Key: `/${file.originalname}`, // Object key, referenced whenever you want to access this file later.
       ACL: "public-read", // Defines ACL permissions, such as private or public.
-    };
+    }; */
     let data = await s3Client.send(new PutObjectCommand(params));
     console.log(data);
     console.log(

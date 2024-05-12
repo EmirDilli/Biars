@@ -118,6 +118,8 @@ async function parseCSVData(buffer, activeSemester) {
     await s3Client.send(new PutObjectCommand(params));
 
     const sectionDb = await section.save();
+    instructorDb.classes.push(sectionDb);
+    await instructorDb.save();
     classSemesters[classCode].sections.push(sectionDb._id);
     await classSemesters[classCode].save();
   };

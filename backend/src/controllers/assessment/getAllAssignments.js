@@ -34,10 +34,12 @@ module.exports.getAllAssignments = async (req, res) => {
   try {
     const data = await s3Client.send(new ListObjectsV2Command(params));
     let result = [];
-    for (let i = 0; i < data.Contents.length; i++) {
-      result.push(data.Contents[i].Key);
-    }
-    return res.status(200).json(result);
+    if (data.Contents) {
+      for (let i = 0; i < data.Contents.length; i++) {
+        result.push(data.Contents[i].Key);
+      }
+      return res.status(200).json(result);
+    } else return res.status(404).json();
   } catch (error) {
     console.error("Error fetching files:", error);
     res.status(500).send("Error fetching files");

@@ -211,7 +211,7 @@ const Modal = ({
       formData.append("text", textValue);
     } else if (contentType === "file" && file) {
       formData.append("files", file.fileData, file.fileName);
-      formData.append("files", file.fileName);
+      formData.append("name", file.fileName);
     } else if (contentType === "assignment") {
       files.forEach((file) => {
         formData.append("files", file.fileData, file.fileName);
@@ -229,6 +229,7 @@ const Modal = ({
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(response);
       console.log("Success:", response.data);
       onSubmit(); // Optionally pass any necessary data
       onClose();

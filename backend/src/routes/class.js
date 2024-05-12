@@ -11,6 +11,8 @@ const { activeSemesters } = require("../controllers/class/activeSemesters");
 const { weekly } = require("../controllers/weekly/weekly");
 const { addWeekly } = require("../controllers/weekly/addWeekly");
 const multer = require("multer");
+const { getClassGrades } = require("../controllers/class/getClassGrade");
+const { updateGrades } = require("../controllers/class/updateGrade");
 const { getGrades } = require("../controllers/class/getGrades");
 const upload = multer();
 
@@ -30,4 +32,6 @@ router.post(
   addWeekly
 );
 router.get("/:className/getGrades", isAuth, getGrades);
+router.get("/:className/classGrades", isAuth, getClassGrades);
+router.post("/:className/updateGrades", isAuth, updateGrades);
 module.exports = router;

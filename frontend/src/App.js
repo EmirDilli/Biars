@@ -15,8 +15,9 @@ import StaticsTable from "./pages/AnalysisPage/StaticsTable";
 import Admin from "./pages/AdminMainPage/AdminPage";
 import ClassSections from "./pages/ClassPage/Grading";
 import WeeklySchedule from "./pages/ClassPage/MainPage";
+import InstructorWeekly from "./pages/ClassPage/InstructorWeekly";
 import QuestionPage from "./pages/questionDisplayPage/questionDisplay";
-
+import GradingPage from "./pages/ClassPage/Grading";
 import Submissions from "./pages/ClassPage/Submissions";
 import AssessmentPage from "./pages/AssessmentPage/AssessmentPage";
 import QuestinDisplayPage from "./pages/questionDisplayPage/questionDisplay";
@@ -115,11 +116,16 @@ function App() {
         element={<WeeklySchedule />}
       />
       <Route
+        path="class/:className/:sectionNumber/instWeekly"
+        element={<InstructorWeekly />}
+      />
+      <Route
         path="class/:className/:sectionNumber/:assignment/submissions"
         element={<Submissions />}
       />
       <Route path="assessment" element={<AssessmentPage />} />
       <Route path="question" element={<QuestinDisplayPage />} />
+      <Route path="class/:className/grading" element={<GradingPage />} />
     </Routes>
   );
 }

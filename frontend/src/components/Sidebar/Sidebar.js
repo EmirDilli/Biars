@@ -1,24 +1,33 @@
-import { RssFeed, Book } from "@mui/icons-material";
+import { Event, Book, SmartToy } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import "./sidebar.css";
 
-export default function Sidebar() {
+const Sidebar = () => {
   const navigate = useNavigate();
-  function openSchedule() {
+
+  const openCalendar = () => {
+    navigate("/event");
+  };
+
+  const openChatbot = () => {
+    navigate("/chatbot");
+  };
+
+  const openSchedule = () => {
     navigate("/schedule");
-  }
+  };
+
   return (
-    <div className="sidebar">
+    <div className="sidebar" style={{ marginTop: "75px" }}>
       <div className="sidebarWrapper">
         <ul className="sidebarList">
-          <li className="sidebarListItem">
-            <RssFeed className="sidebarIcon" />
-            <span className="sidebarListItemText">Feed</span>
+          <li className="sidebarListItem" onClick={openCalendar}>
+            <Event className="sidebarIcon" />
+            <span className="sidebarListItemText">Calendar</span>
           </li>
 
-          <li className="sidebarListItem">
-            <RssFeed className="sidebarIcon" />
-            <span className="sidebarListItemText">Feed</span>
+          <li className="sidebarListItem" onClick={openChatbot}>
+            <SmartToy className="sidebarIcon" />
+            <span className="sidebarListItemText">Chatbot</span>
           </li>
 
           <li className="sidebarListItem" onClick={openSchedule}>
@@ -30,4 +39,6 @@ export default function Sidebar() {
       </div>
     </div>
   );
-}
+};
+
+export default Sidebar;

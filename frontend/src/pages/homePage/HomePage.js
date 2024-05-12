@@ -75,9 +75,16 @@ export default function HomePageStudent() {
     setSelectedClass(null);
   };
   const openWeekly = (classData) => {
-    navigate(
-      `/class/${classData.classSemester.class.code}/${classData.sectionNumber}/weekly`
-    );
+    const type = localStorage.getItem("type");
+    if (type == 3)
+      navigate(
+        `/class/${classData.classSemester.class.code}/${classData.sectionNumber}/weekly`
+      );
+    if (type == 1) {
+      navigate(
+        `/class/${classData.classSemester.class.code}/${classData.sectionNumber}/instWeekly`
+      );
+    }
   };
 
   return (
@@ -128,7 +135,9 @@ export default function HomePageStudent() {
               gradesFinal.length > 0 &&
               gradesFinal.map((grade, index) => (
                 <div className="grade-box" key={index}>
-                  <div className="grade-date">{grade.assignment.date}</div>
+                  <div className="grade-date">
+                    {formatDate(grade.assignment.date)}
+                  </div>
                   <div className="grade-score">
                     {grade.assignment.name}: {grade.score}
                   </div>
@@ -140,3 +149,15 @@ export default function HomePageStudent() {
     </>
   );
 }
+const formatDate = (dateString) => {
+  // Create a new Date object from the dateString
+  const date = new Date(dateString);
+
+  // Define options for formatting the date
+  const options = { day: "2-digit", month: "2-digit", year: "2-digit" };
+
+  // Format the date using Intl.DateTimeFormat
+  const formattedDate = new Intl.DateTimeFormat("en-GB", options).format(date);
+
+  return formattedDate;
+};
