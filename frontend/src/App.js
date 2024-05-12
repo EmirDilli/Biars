@@ -24,6 +24,12 @@ import QuestinDisplayPage from "./pages/questionDisplayPage/questionDisplay";
 
 import Schedule from "./pages/SchedulePage/SchedulePage";
 
+import ChatbotMainPage from "./pages/ChatbotPages/chatbotMainPage";
+import DragDropPage from "./pages/ChatbotPages/DragDropPage";
+import ChatPage from "./pages/ChatbotPages/ChatPage";
+import RemoveSourcePage from "./pages/ChatbotPages/RemoveSourcePage";
+import ShowChunksPage from "./pages/ChatbotPages/ShowChunksPage";
+
 function App() {
   const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
@@ -126,6 +132,11 @@ function App() {
       <Route path="assessment" element={<AssessmentPage />} />
       <Route path="question" element={<QuestinDisplayPage />} />
       <Route path="class/:className/grading" element={<GradingPage />} />
+      <Route path="/chatbotMain" element={<ChatbotMainPage />} />
+      <Route path="/drag-drop" element={<DragDropPage />} />
+      <Route path="/chatbot1" element={<ChatPage />} />  
+      <Route path="/remove-source" element={<RemoveSourcePage />} />
+      <Route path="/show-chunks" element={<ShowChunksPage />} /> 
     </Routes>
   );
 }
